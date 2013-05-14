@@ -100,6 +100,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save recipe list");
+		JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image"); 
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
@@ -112,6 +113,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		m.add(newMenuItemDel);
 		m.add(newMenuItemLoadList);
 		m.add(newMenuItemSaveList);
+		m.add(newMenuItemImageLoad);
 
 		menuBar.add(m);
 
@@ -215,6 +217,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	}
 
+    public class ImageLoader implements ActionListener{
+    }
 
 	/**
     an inner class that opens a recipeList based when the user presses the appropiate button 
