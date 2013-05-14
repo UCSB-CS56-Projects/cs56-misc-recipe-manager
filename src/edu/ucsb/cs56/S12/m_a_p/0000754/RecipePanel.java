@@ -106,6 +106,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save recipe list");
 		JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image"); 
+		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for a recipe");
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
@@ -113,6 +114,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
 		newMenuItemImageLoad.addActionListener(new ImageLoader());
+		newMenuItemSearchBox.addActionListener(new SearchBox());
 
 		//add menu items to menu and add menu to menubar
 		m.add(newMenuItem);
@@ -120,7 +122,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		m.add(newMenuItemLoadList);
 		m.add(newMenuItemSaveList);
 		m.add(newMenuItemImageLoad);
-
+		m.add(newMenuItemSearchBox);
 		menuBar.add(m);
 
 		//add everything to this JPanel
@@ -208,21 +210,27 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	/**
     an inner class that deletes a recipe based on when the user presses the appropiate button 
 	 */
-	public class deleteRecipe implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			index = listNames.getSelectedIndex();  
-			list.remove(index);	
-			listModel.remove(index);
-
-			listNames.setModel(listModel);
-			listNames.setSelectedIndex(0);
-			//saveList(list);
-		}
-
+    public class deleteRecipe implements ActionListener{
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+	    index = listNames.getSelectedIndex();  
+	    list.remove(index);	
+	    listModel.remove(index);
+	    
+	    listNames.setModel(listModel);
+	    listNames.setSelectedIndex(0);
+	    //saveList(list);
 	}
-
+	
+    }
+    //Search for recipes
+    public class SearchBox implements ActionListener{
+	@Override
+	public void actionPerformed(ActionEvent arg0){
+	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
+	}
+    }
     public class ImageLoader implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0)
@@ -231,7 +239,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    int returnVal = ic.showOpenDialog(listNames);
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
 		    File file = ic.getSelectedFile();
-		    try{
+	    }
 	}
     }
 
