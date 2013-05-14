@@ -34,6 +34,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	JPanel recipeBox;
 
 	JFileChooser fc;
+        JFileChooser ic;
 
 	/**
     no-arg constructor constructs the JPanel and adds all the components
@@ -218,6 +219,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	}
 
     public class ImageLoader implements ActionListener{
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+	    ic = new JFileChooser();
+	    int returnVal = ic.showOpenDialog(listNames);
+
+	}
     }
 
 	/**
