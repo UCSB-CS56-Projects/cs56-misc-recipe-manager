@@ -3,6 +3,8 @@ package edu.ucsb.cs56.S12.m_a_p.cp3;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -29,9 +31,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	DefaultListModel listModel;
 
 	JLabel recipeInfo;
+        JLabel recipeImage;
 	int index = 0;
 	JPanel RecipesListed;   
 	JPanel recipeBox;
+        BufferedImage image;
 
 	JFileChooser fc;
         JFileChooser ic;
@@ -108,6 +112,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemDel.addActionListener(new deleteRecipe());
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
+		newMenuItemImageLoad.addActionListener(new ImageLoader());
 
 		//add menu items to menu and add menu to menubar
 		m.add(newMenuItem);
@@ -224,7 +229,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	{
 	    ic = new JFileChooser();
 	    int returnVal = ic.showOpenDialog(listNames);
-
+	    if (returnVal == JFileChooser.APPROVE_OPTION){
+		    File file = ic.getSelectedFile();
+		    try{
 	}
     }
 
