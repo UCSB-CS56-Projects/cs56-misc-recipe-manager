@@ -53,12 +53,19 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		//Label that actually contains the recipe info
 		recipeInfo = new JLabel(printInfo());
+	
+
+
+	        	
+	
 
 		// set size and background of recipe info label
 		Dimension preferredSize  = new Dimension(300,list.get(index).getList().size()*35);
 		recipeInfo.setPreferredSize(preferredSize);
 		recipeInfo.setBackground(Color.WHITE);
 		recipeInfo.setOpaque(true);
+		
+
 
 		//make new scroll pane to hold recipe info
 		JScrollPane RecipeInfoScroller  = new JScrollPane(recipeInfo);
@@ -67,6 +74,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);  
 		RecipeInfoScroller .setBackground(Color.WHITE);
+	
+       
+		
 	       
 
 		//set up a list of recipes
@@ -97,12 +107,14 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
-		
+       	
 
 		//makes a new jlabel that holds the recipe image selected by the user
 		recipeImage = new JLabel();
-		//contents.add(picture, BorderLayout.SOUTH);
-
+		picture = new JPanel(new BorderLayout());
+		contents.add(picture, BorderLayout.SOUTH);
+     
+	      
 		//makes a menu at top of frame
 		JMenuBar menuBar = new JMenuBar();
 		JMenu m = new JMenu("File");
@@ -239,6 +251,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
 	}
     }
+
     public class ImageLoader implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0)
@@ -252,15 +265,17 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			image = ImageIO.read(file);
 			ImageIcon recipeIcon = new ImageIcon(image);
 			recipeImage.setIcon(recipeIcon);
-			picture = new JPanel(new BorderLayout());
 			
 			Dimension imageSize = new Dimension(recipeIcon.getIconWidth(), recipeIcon.getIconHeight());
 			recipeImage.setPreferredSize(imageSize);
+			
+		
 			picture.add(recipeImage, BorderLayout.SOUTH);
-		      
+	   
+		   
 			recipeImage.revalidate();
 			recipeImage.repaint();
-    
+		
 		    }
 		    catch(IOException ex){
 			ex.printStackTrace();
