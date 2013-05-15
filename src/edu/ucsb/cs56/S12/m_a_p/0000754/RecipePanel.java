@@ -35,6 +35,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	int index = 0;
 	JPanel RecipesListed;   
 	JPanel recipeBox;
+        JPanel picture;
         BufferedImage image;
 
 	JFileChooser fc;
@@ -66,6 +67,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);  
 		RecipeInfoScroller .setBackground(Color.WHITE);
+	       
 
 		//set up a list of recipes
 		listModel = new DefaultListModel();
@@ -95,6 +97,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
+		
+
+		//makes a new jlabel that holds the recipe image selected by the user
+		recipeImage = new JLabel();
+		//contents.add(picture, BorderLayout.SOUTH);
 
 		//makes a menu at top of frame
 		JMenuBar menuBar = new JMenuBar();
@@ -127,6 +134,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(menuBar , BorderLayout.PAGE_START);
 		add(contents , BorderLayout.CENTER);
+			     
 
 	}//end RecipePanel() no arg constructor
 
@@ -232,8 +240,31 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
 		    File file = ic.getSelectedFile();
 		    try{
+			image = ImageIO.read(file);
+			ImageIcon recipeIcon = new ImageIcon(image);
+			recipeImage.setIcon(recipeIcon);
+			picture = new JPanel(new BorderLayout());
+			
+			Dimension imageSize = new Dimension(recipeIcon.getIconWidth(), recipeIcon.getIconHeight());
+			recipeImage.setPreferredSize(imageSize);
+			picture.add(recipeImage, BorderLayout.SOUTH);
+		      
+			recipeImage.revalidate();
+			recipeImage.repaint();
+    
+		    }
+		    catch(IOException ex){
+			ex.printStackTrace();
+		    }
+		    finally{
+			listNames.setSelectedIndex(0);
+		    }
+	    }
 	}
+	    
+		    
     }
+
 
 	/**
     an inner class that opens a recipeList based when the user presses the appropiate button 
