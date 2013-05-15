@@ -247,7 +247,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    int returnVal = ic.showOpenDialog(listNames);
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
 		    File file = ic.getSelectedFile();
-<<<<<<< HEAD
+
 		    try{
 			image = ImageIO.read(file);
 			ImageIcon recipeIcon = new ImageIcon(image);
@@ -268,8 +268,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		    finally{
 			listNames.setSelectedIndex(0);
 		    }
-=======
->>>>>>> 84927db9ca650c8857f0ebae27ea18cc33c13ca0
+
 	    }
 	}
 	    
