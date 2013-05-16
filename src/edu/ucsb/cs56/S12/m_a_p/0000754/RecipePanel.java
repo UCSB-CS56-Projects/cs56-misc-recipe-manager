@@ -9,7 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.awt.Graphics;
 
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -24,28 +28,30 @@ import javax.swing.filechooser.*;
 
 
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
+    int recipeNumber=2;
+    RecipeList list = loadList();
+    
+    JList listNames;
+    DefaultListModel listModel;
+    
+    JLabel recipeInfo;
+    JLabel recipeImage;
+    int index = 0;
+    JPanel RecipesListed;   
+    JPanel recipeBox;
+    JPanel picture;
+    BufferedImage image;
 
-	RecipeList list = loadList();
-
-	JList listNames;
-	DefaultListModel listModel;
-
-	JLabel recipeInfo;
-        JLabel recipeImage;
-	int index = 0;
-	JPanel RecipesListed;   
-	JPanel recipeBox;
-        BufferedImage image;
-
-	JFileChooser fc;
-        JFileChooser ic;
-
+    JFileChooser fc;
+    JFileChooser ic;
+    JPanel contents = new JPanel(new BorderLayout());
+    
 	/**
     no-arg constructor constructs the JPanel and adds all the components
 	 */
 
-	public RecipePanel(){
-		super(new BorderLayout());  
+    public RecipePanel(){
+	    super(new BorderLayout());  
 
 		//title image
 		JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/title.jpg"), "title"),JLabel.CENTER);
@@ -91,10 +97,15 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipesListed.setBackground(Color.WHITE);
 
 		//make new jpanel that holds the title label and recipe info 
-		JPanel contents = new JPanel(new BorderLayout());  
+		//JPanel contents = new JPanel(new BorderLayout());  
 		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
+
+		recipeImage = new JLabel();
+		picture=new JPanel(new BorderLayout());
+		//contents.add(recipeImage, BorderLayout.SOUTH);
+
 
 		//makes a menu at top of frame
 		JMenuBar menuBar = new JMenuBar();
@@ -129,6 +140,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(menuBar , BorderLayout.PAGE_START);
 		add(contents , BorderLayout.CENTER);
+
 
 	}//end RecipePanel() no arg constructor
 
@@ -214,6 +226,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+	    recipeNumber--;
 	    index = listNames.getSelectedIndex();  
 	    list.remove(index);	
 	    listModel.remove(index);
@@ -231,7 +244,27 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
 	}
     }
-    public class ImageLoader implements ActionListener{
+    /*
+    public class SearchRecipes{
+	for(int i=recipeNumber-1; i>-1; i--){
+	    
+	    try{
+		File myFile = new File("" + listNames[i]);
+		FileReader fileReader = new FileReader(myFile);
+		BufferedReader reader = new BufferedReader(fileReader);
+		String line = null;
+		while ((line=reader.readLine()) != null) {
+		    System.out.println(line);
+		}
+		reader.close();
+	    } catch(Exception ex) {
+		ex.printStackTrace();
+	    }
+	}
+    }
+
+    */ 			       
+    public class ImageLoader extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{
@@ -239,10 +272,30 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    int returnVal = ic.showOpenDialog(listNames);
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
 		    File file = ic.getSelectedFile();
+		    try{
+			image = ImageIO.read(file);
+			ImageIcon recipeIcon = new ImageIcon(image);
+			//recipeImage.setIcon(recipeIcon);
+			JLabel recipeImage = new JLabel(recipeIcon,JLabel.CENTER);
+			Dimension imageSize = new Dimension(recipeIcon.getIconWidth(), recipeIcon.getIconHeight());
+			recipeImage.setPreferredSize(imageSize);
+
+			
+			contents.add(recipeImage, BorderLayout.SOUTH);
+
+
+			recipeImage.revalidate();
+			recipeImage.repaint();
+		    }catch(IOException ex){
+			ex.printStackTrace();
+		    }
+    
 	    }
+	    
 	}
     }
 
+				      
 	/**
     an inner class that opens a recipeList based when the user presses the appropiate button 
 	 */
