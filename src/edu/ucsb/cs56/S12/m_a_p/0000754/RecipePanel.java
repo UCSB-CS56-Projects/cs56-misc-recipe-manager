@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.awt.Graphics;
-
+//import org.apache.commons.io.FileUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -164,7 +164,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public void valueChanged(ListSelectionEvent lse){
 
 		if(!lse.getValueIsAdjusting()){
-			index = listNames.getSelectedIndex();  
+			index = listNames.getSelectedIndex();
+			String imageName=list.get(index).getImageName();  
 			String info = printInfo() + " ";
 			recipeInfo.setText(info);                 
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
@@ -250,6 +251,34 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	}
 
     }
+
+
+    public class FileReader {
+
+	public String getFileAsString(File file){ FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    DataInputStream dis = null;
+	    StringBuffer sb = new StringBuffer();
+	    try {
+		fis = new FileInputStream(file);
+		bis = new BufferedInputStream(fis);
+		dis = new DataInputStream(bis);
+		
+		while (dis.available() != 0) {
+		    sb.append( dis.readLine() +"\n");
+		}
+		fis.close();
+		bis.close();
+		dis.close();
+		
+	    } catch (FileNotFoundException e) {
+		e.printStackTrace();
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
+	    return sb.toString();
+	}
+    }
     //Search for recipes
     public class SearchBox implements ActionListener{
 	@Override
@@ -286,23 +315,15 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
 		    File file = ic.getSelectedFile();
 		    try{
+			//imageName=Recipe.setImageName(file);
 			image = ImageIO.read(file);
 			index = listNames.getSelectedIndex();
+			FileReader fd = new FileReader();
+			list.get(index).setImageName(fd.getFileAsString(file));
 			recipeIcon = new ImageIcon(image);
 			recipeIconList[index] = recipeIcon;
 			recipeInfo.setIcon(recipeIcon);
-			//recipeImage = new JLabel(recipeIcon,JLabel.CENTER);
-			//Dimension imageSize = new Dimension(recipeIcon.getIconWidth(), recipeIcon.getIconHeight());
-			//recipeImage.setPreferredSize(imageSize);
-			//int index2 = listNames.getSelectedIndex();
-			//imageArray[index2]=recipeImage;
-			//imageArray[index2] = new JLabel( recipeIcon);
-			//contents.add(recipeImage, BorderLayout.SOUTH);
-		
-
-
-			//recipeImage.revalidate();
-			//recipeImage.repaint();
+	      
 		    }catch(IOException ex){
 			ex.printStackTrace();
 		    }
@@ -344,6 +365,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(file));
 					list = (RecipeList) is.readObject();
+					//image = ImageIO.read(file);
+					//index = listNames.getSelectedIndex();
+					//recipeIcon = new ImageIcon(image);
+					//recipeIconList[index] = recipeIcon;
+					//recipeInfo.setIcon(recipeIcon);
 				} catch(Exception ex){
 					ex.printStackTrace(); 
 
@@ -382,6 +408,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					ObjectOutputStream os = new ObjectOutputStream(fs);
 
 					os.writeObject(list);
+					//ImageIO.write(image,"JPEG",os);
 					os.close();
 				} catch(Exception ex) {
 					ex.printStackTrace();

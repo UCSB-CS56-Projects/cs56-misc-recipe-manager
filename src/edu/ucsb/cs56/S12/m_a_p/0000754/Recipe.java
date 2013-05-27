@@ -15,7 +15,7 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	private IngredientsList ingredientlist = new IngredientsList();
 	private String description;
 	private String directions;
-	
+	private String imageName;
 	
 	/** 
 	a constructor that takes the names description and directions as prerameters and adds them to the Recipe
@@ -24,9 +24,14 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 		this.name = name;
 		this.description = Description;
 		this.directions = Directions;
-
 	}
 
+	public String getImageName(){
+	    return imageName;
+	}
+	public void setImageName(String imageName){
+	    this.imageName=imageName;
+	}
 	/** 
 	one arg constructor that just adds the name
 	 */
