@@ -28,6 +28,9 @@ import javax.swing.filechooser.*;
 
 
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
+
+    public static final boolean debug=true;
+
     //int recipeNumber=2;
     RecipeList list = loadList();
     RecipeList temp;
@@ -162,16 +165,20 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public void valueChanged(ListSelectionEvent lse){
 
+       	    if (debug) { System.out.println("In RecipePanel.valueChanged..."); }
 		if(!lse.getValueIsAdjusting()){
 			index = listNames.getSelectedIndex();
-			String imageName=list.get(index).getImageName();  
+			
+			if (debug) { System.out.println("In RecipePanel.valueChanged, inside if, index="+index); }
+			
+			// String imageName=list.get(index).getImageName();    // FOR FILE SAVING ???
      
 			String info = printInfo() + " ";
 		          
 			recipeInfo.setText(info);                 
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
-			recipeIcon = recipeIconList[index];
+			// recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
 			recipeInfo.setIcon(recipeIcon);
 			/*
 			//imageArray[index] = new JLabel( recipeIcon);

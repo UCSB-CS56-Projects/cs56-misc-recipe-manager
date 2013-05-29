@@ -24,5 +24,10 @@ public class RecipeList extends ArrayList<Recipe> implements Serializable {
 		add(r);
 		
 	}
+
+	/** TODO: Document and implement this method.. or not.  If not remove this. */
+	public Recipe getRecipeByName(String recipeName) {
+	    return null; // Eventually, search through "this" and if any recipe has this name, return it.
+	}
 	
 }
