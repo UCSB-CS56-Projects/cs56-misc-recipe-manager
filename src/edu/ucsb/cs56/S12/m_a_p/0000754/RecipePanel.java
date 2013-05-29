@@ -1,4 +1,4 @@
-package edu.ucsb.cs56.S12.m_a_p.cp3;
+ package edu.ucsb.cs56.S12.m_a_p.cp3;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,23 +30,22 @@ import javax.swing.filechooser.*;
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
     //int recipeNumber=2;
     RecipeList list = loadList();
+    RecipeList temp;
     
     JList listNames;
     JList pictureList;
     DefaultListModel listModel;
-    //int index2 = listNames.getSelectedIndex();
-    // Dimension imageSize = new Dimension(recipeIcon.getIconWidth(), recipeIcon.getIconHeight());
+   
     JLabel recipeInfo;
     JLabel recipeImage;
     int index = 0;
+    int index2;
     JPanel RecipesListed;   
     JPanel recipeBox;
     JPanel picture;
     BufferedImage image;
     ImageIcon[] recipeIconList = new ImageIcon[10];
     ImageIcon recipeIcon;
-    //JLabel[] imageArray = new JLabel[10];
-    
     JFileChooser fc;
     JFileChooser ic;
     JPanel contents = new JPanel(new BorderLayout());
@@ -166,7 +165,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		if(!lse.getValueIsAdjusting()){
 			index = listNames.getSelectedIndex();
 			String imageName=list.get(index).getImageName();  
+     
 			String info = printInfo() + " ";
+		          
 			recipeInfo.setText(info);                 
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
@@ -252,7 +253,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
     }
 
-
+    /*
     public class FileReader {
 
 	public String getFileAsString(File file){ FileInputStream fis = null;
@@ -279,33 +280,54 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    return sb.toString();
 	}
     }
+    */
     //Search for recipes
     public class SearchBox implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0){
 	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
-	}
-    }
-    /*
-    public class SearchRecipes{
-	for(int i=recipeNumber-1; i>-1; i--){
-	    
+	    String[] holdingList = new String[list.size()];
+	    listModel.copyInto(holdingList);
+	     DefaultListModel searchedList = new DefaultListModel();
+	       
 	    try{
-		File myFile = new File("" + listNames[i]);
-		FileReader fileReader = new FileReader(myFile);
-		BufferedReader reader = new BufferedReader(fileReader);
-		String line = null;
-		while ((line=reader.readLine()) != null) {
-		    System.out.println(line);
+		for(String s: holdingList){
+		    if(userInput.matches(s))
+			{
+			    searchedList.addElement(s);
+			    //index2 = holdingList.indexOf(userInput);
+			}
 		}
-		reader.close();
-	    } catch(Exception ex) {
+	    }   
+	    catch(Exception ex){
 		ex.printStackTrace();
+	    }
+	    finally{
+		/*
+		String info = new String();
+		int i = 0;
+		if(searchedList.get(i) == list.get(i).toString())
+		    {
+			info = list.get(i).printRecipe()+ " ";
+		    }
+		else
+		    info = list.get(i+1).printRecipe()+ " ";
+	       
+		recipeInfo.setText(info);
+		*/
+		listNames.setModel(searchedList);
+		//	listNames.setSelectedIndex(0);
+		
 	    }
 	}
     }
 
-    */ 			       
+    
+ 
+
+
+
+     			       
     public class ImageLoader implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0)
@@ -318,12 +340,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			//imageName=Recipe.setImageName(file);
 			image = ImageIO.read(file);
 			index = listNames.getSelectedIndex();
-			FileReader fd = new FileReader();
-			list.get(index).setImageName(fd.getFileAsString(file));
+			//FileReader fd = new FileReader();
+			//list.get(index).setImageName(fd.getFileAsString(file));
 			recipeIcon = new ImageIcon(image);
 			recipeIconList[index] = recipeIcon;
 			recipeInfo.setIcon(recipeIcon);
-	      
+		       
 		    }catch(IOException ex){
 			ex.printStackTrace();
 		    }
@@ -361,7 +383,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
-
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(file));
 					list = (RecipeList) is.readObject();
@@ -379,7 +400,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					for(String s : listMembers)
 						listModel.addElement(s);
 					listNames.setModel(listModel);
-					listNames.setSelectedIndex(0);
+				       	listNames.setSelectedIndex(0);
 				}
 
 
@@ -405,7 +426,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 				try {
 					FileOutputStream fs = new FileOutputStream(file);
-					ObjectOutputStream os = new ObjectOutputStream(fs);
+			ObjectOutputStream os = new ObjectOutputStream(fs);
 
 					os.writeObject(list);
 					//ImageIO.write(image,"JPEG",os);
