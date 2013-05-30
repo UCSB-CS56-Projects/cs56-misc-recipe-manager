@@ -294,7 +294,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public void actionPerformed(ActionEvent arg0){
 	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
 	    String[] holdingList = new String[list.size()];
-	    listModel.copyInto(holdingList);
+	    for(int i = 0; i < list.size(); i++)
+		{
+		    holdingList[i] = list.get(i).toString();
+		}
+	    //listModel.copyInto(holdingList);
 	     DefaultListModel searchedList = new DefaultListModel();
 	       
 	    try{
@@ -312,10 +316,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    finally{
 		
 		String info = new String();
-		int x = 0;
 		int i = 0;
 		
-		while(searchedList.get(x) != list.get(i).toString())
+		while(searchedList.get(0) != list.get(i).toString())
 		    {
 			i++;
 		    }
