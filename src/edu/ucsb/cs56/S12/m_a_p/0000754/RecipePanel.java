@@ -1,13 +1,19 @@
-package edu.ucsb.cs56.S12.m_a_p.cp3;
+ package edu.ucsb.cs56.S12.m_a_p.cp3;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.awt.Graphics;
+//import org.apache.commons.io.FileUtils;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -23,24 +29,36 @@ import javax.swing.filechooser.*;
 
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
 
-	RecipeList list = loadList();
+    public static final boolean debug=true;
 
-	JList listNames;
-	DefaultListModel listModel;
-
-	JLabel recipeInfo;
-	int index = 0;
-	JPanel RecipesListed;   
-	JPanel recipeBox;
-
-	JFileChooser fc;
-
+    //int recipeNumber=2;
+    RecipeList list = loadList();
+    RecipeList temp;
+    
+    JList listNames;
+    JList pictureList;
+    DefaultListModel listModel;
+   
+    JLabel recipeInfo;
+    JLabel recipeImage;
+    int index = 0;
+    int index2;
+    JPanel RecipesListed;   
+    JPanel recipeBox;
+    JPanel picture;
+    BufferedImage image;
+    ImageIcon[] recipeIconList = new ImageIcon[10];
+    ImageIcon recipeIcon;
+    JFileChooser fc;
+    JFileChooser ic;
+    JPanel contents = new JPanel(new BorderLayout());
+    
 	/**
     no-arg constructor constructs the JPanel and adds all the components
 	 */
 
-	public RecipePanel(){
-		super(new BorderLayout());  
+    public RecipePanel(){
+	    super(new BorderLayout());  
 
 		//title image
 		JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/title.jpg"), "title"),JLabel.CENTER);
@@ -86,10 +104,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipesListed.setBackground(Color.WHITE);
 
 		//make new jpanel that holds the title label and recipe info 
-		JPanel contents = new JPanel(new BorderLayout());  
+		recipeIcon = new ImageIcon();
+		//JPanel contents = new JPanel(new BorderLayout());  
 		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
+
+
 
 		//makes a menu at top of frame
 		JMenuBar menuBar = new JMenuBar();
@@ -100,25 +121,31 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save recipe list");
+		JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image"); 
+		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for a recipe");
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
 		newMenuItemDel.addActionListener(new deleteRecipe());
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
+		newMenuItemImageLoad.addActionListener(new ImageLoader());
+		newMenuItemSearchBox.addActionListener(new SearchBox());
 
 		//add menu items to menu and add menu to menubar
 		m.add(newMenuItem);
 		m.add(newMenuItemDel);
 		m.add(newMenuItemLoadList);
 		m.add(newMenuItemSaveList);
-
+		m.add(newMenuItemImageLoad);
+		m.add(newMenuItemSearchBox);
 		menuBar.add(m);
 
 		//add everything to this JPanel
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(menuBar , BorderLayout.PAGE_START);
 		add(contents , BorderLayout.CENTER);
+
 
 	}//end RecipePanel() no arg constructor
 
@@ -138,12 +165,29 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public void valueChanged(ListSelectionEvent lse){
 
+       	    if (debug) { System.out.println("In RecipePanel.valueChanged..."); }
 		if(!lse.getValueIsAdjusting()){
-			index = listNames.getSelectedIndex();  
+			index = listNames.getSelectedIndex();
+			
+			if (debug) { System.out.println("In RecipePanel.valueChanged, inside if, index="+index); }
+			
+			// String imageName=list.get(index).getImageName();    // FOR FILE SAVING ???
+     
 			String info = printInfo() + " ";
+		          
 			recipeInfo.setText(info);                 
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
+			recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
+			recipeInfo.setIcon(recipeIcon);
+			/*
+			//imageArray[index] = new JLabel( recipeIcon);
+			if(imageArray[listNames.getSelectedIndex()]!=null){
+
+				contents.add(imageArray[listNames.getSelectedIndex()], BorderLayout.SOUTH);
+				recipeImage.revalidate();
+				recipeImage.repaint();
+				}*/
 		}
 
 
@@ -200,21 +244,143 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	/**
     an inner class that deletes a recipe based on when the user presses the appropiate button 
 	 */
-	public class deleteRecipe implements ActionListener{
+    public class deleteRecipe implements ActionListener{
 
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			index = listNames.getSelectedIndex();  
-			list.remove(index);	
-			listModel.remove(index);
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+	   
+	    index = listNames.getSelectedIndex();  
+	    list.remove(index);	
+	    listModel.remove(index);
 
-			listNames.setModel(listModel);
-			listNames.setSelectedIndex(0);
-			//saveList(list);
-		}
-
+	    listNames.setModel(listModel);
+	    listNames.setSelectedIndex(0);
+	    //saveList(list);
 	}
 
+    }
+
+    /*
+    public class FileReader {
+
+	public String getFileAsString(File file){ FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    DataInputStream dis = null;
+	    StringBuffer sb = new StringBuffer();
+	    try {
+		fis = new FileInputStream(file);
+		bis = new BufferedInputStream(fis);
+		dis = new DataInputStream(bis);
+		
+		while (dis.available() != 0) {
+		    sb.append( dis.readLine() +"\n");
+		}
+		fis.close();
+		bis.close();
+		dis.close();
+		
+	    } catch (FileNotFoundException e) {
+		e.printStackTrace();
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
+	    return sb.toString();
+	}
+    }
+    */
+    //Search for recipes
+    public class SearchBox implements ActionListener{
+	@Override
+	public void actionPerformed(ActionEvent arg0){
+	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
+	    String[] holdingList = new String[list.size()];
+	    for(int i = 0; i < list.size(); i++)
+		{
+		    holdingList[i] = list.get(i).toString();
+		}
+	    //listModel.copyInto(holdingList);
+	     DefaultListModel searchedList = new DefaultListModel();
+	       
+	    try{
+		for(String s: holdingList){
+		    if(userInput.matches(s))
+			{
+			    searchedList.addElement(s);
+			    //index2 = holdingList.indexOf(userInput);
+			}
+		}
+	    }   
+	    catch(Exception ex){
+		ex.printStackTrace();
+	    }
+	    finally{
+		
+		String info = new String();
+		int i = 0;
+		
+		while(searchedList.get(0) != list.get(i).toString())
+		    {
+			i++;
+		    }
+		index = i;
+	       
+		//recipeInfo.setText(info);
+		
+		//listNames.setModel(searchedList);
+		listNames.setSelectedIndex(index);
+		
+	    }
+	}
+    }
+
+    
+ 
+
+
+
+     			       
+    public class ImageLoader implements ActionListener{
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+	    ic = new JFileChooser();
+	    int returnVal = ic.showOpenDialog(listNames);
+	    if (returnVal == JFileChooser.APPROVE_OPTION){
+		    File file = ic.getSelectedFile();
+		    try{
+			//imageName=Recipe.setImageName(file);
+			image = ImageIO.read(file);
+			index = listNames.getSelectedIndex();
+			//FileReader fd = new FileReader();
+			//list.get(index).setImageName(fd.getFileAsString(file));
+			recipeIcon = new ImageIcon(image);
+			recipeIconList[index] = recipeIcon;
+			recipeInfo.setIcon(recipeIcon);
+		       
+		    }catch(IOException ex){
+			ex.printStackTrace();
+		    }
+    
+	    }
+
+	}/*
+	public JLabel printImage(){
+	    int index = listNames.getSelectedIndex();
+	    return imageArray[index];
+	}
+	 
+	public void valueChanged(ListSelectionEvent arg0)
+	{
+	    if(!arg0.getValueIsAdjusting())
+		{
+		    
+		    recipeInfo.setIcon(
+		    
+		}
+
+		}
+	 */
+    }
 
 	/**
     an inner class that opens a recipeList based when the user presses the appropiate button 
@@ -228,10 +394,14 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
-
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(file));
 					list = (RecipeList) is.readObject();
+					//image = ImageIO.read(file);
+					//index = listNames.getSelectedIndex();
+					//recipeIcon = new ImageIcon(image);
+					//recipeIconList[index] = recipeIcon;
+					//recipeInfo.setIcon(recipeIcon);
 				} catch(Exception ex){
 					ex.printStackTrace(); 
 
@@ -241,7 +411,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					for(String s : listMembers)
 						listModel.addElement(s);
 					listNames.setModel(listModel);
-					listNames.setSelectedIndex(0);
+				       	listNames.setSelectedIndex(0);
 				}
 
 
@@ -267,9 +437,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 				try {
 					FileOutputStream fs = new FileOutputStream(file);
-					ObjectOutputStream os = new ObjectOutputStream(fs);
+			ObjectOutputStream os = new ObjectOutputStream(fs);
 
 					os.writeObject(list);
+					//ImageIO.write(image,"JPEG",os);
 					os.close();
 				} catch(Exception ex) {
 					ex.printStackTrace();
