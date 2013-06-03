@@ -41,6 +41,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
    
     JLabel recipeInfo;
     JLabel recipeImage;
+    
     int index = 0;
     int index2;
     JPanel RecipesListed;   
@@ -312,23 +313,30 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    }   
 	    catch(Exception ex){
 		ex.printStackTrace();
+
 	    }
 	    finally{
 		
 		String info = new String();
 		int i = 0;
-		
-		while(searchedList.get(0) != list.get(i).toString())
-		    {
-			i++;
-		    }
-		index = i;
+
+		if(searchedList.isEmpty())
+			    {
+				JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			    }
+		else{
+		    while(searchedList.get(0) != list.get(i).toString())
+			{
+			    i++;
+			}
+		    index = i;
 	       
 		//recipeInfo.setText(info);
 		
 		//listNames.setModel(searchedList);
-		listNames.setSelectedIndex(index);
-		
+		    listNames.setSelectedIndex(index);
+		}
 	    }
 	}
     }
