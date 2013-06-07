@@ -198,10 +198,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
 			
-		
-			recipeInfo.setIcon(list.get(index).getRecipeIcon());
-			recipeInfo.repaint();
-			recipeInfo.revalidate();
+			if(index >= 0)
+			    {
+				recipeInfo.setIcon(list.get(index).getRecipeIcon());
+				recipeInfo.repaint();
+				recipeInfo.revalidate();
+			    }
 			//recipeInfo.updateUI();
         
 			       
@@ -267,9 +269,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public void actionPerformed(ActionEvent arg0) {
 	   
 	    index = listNames.getSelectedIndex();  
+	    list.get(index).setRecipeIcon(null);
 	    list.remove(index);	
 	    listModel.remove(index);
-
+	    
 	    listNames.setModel(listModel);
 	    listNames.setSelectedIndex(0);
 	    //saveList(list);
@@ -388,11 +391,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
 	       
-			//recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
 			recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
 			recipeInfo.repaint();
 			recipeInfo.revalidate();
-			//recipeInfo.updateUI();
+	        
+	        
 			}
 	}
     }// end of Search
@@ -477,7 +480,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					for(String s : listMembers)
 						listModel.addElement(s);
 					listNames.setModel(listModel);
-				       	listNames.setSelectedIndex(0);
+					//	listNames.setSelectedIndex(0);
 				}
 
 
