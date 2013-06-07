@@ -280,39 +280,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
     }
 
-    /*
-    public class FileReader {
-
-	public String getFileAsString(File file){ FileInputStream fis = null;
-	    BufferedInputStream bis = null;
-	    DataInputStream dis = null;
-	    StringBuffer sb = new StringBuffer();
-	    try {
-		fis = new FileInputStream(file);
-		bis = new BufferedInputStream(fis);
-		dis = new DataInputStream(bis);
-		
-		while (dis.available() != 0) {
-		    sb.append( dis.readLine() +"\n");
-		}
-		fis.close();
-		bis.close();
-		dis.close();
-		
-	    } catch (FileNotFoundException e) {
-		e.printStackTrace();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	    return sb.toString();
-	}
-    }
-    */
+   
     //Search for recipes
     public class SearchBox implements ActionListener, ListSelectionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0){
-	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
+	    String userInput = JOptionPane.showInputDialog("Search for a recipe : ");
 	    String lowerUserInput = userInput.toLowerCase();
 	    String delims = "[ ]+";
 	    String[] lowerUserInputTokens = lowerUserInput.split(delims);
@@ -373,30 +346,33 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
        	    if (debug) { System.out.println("In SearchBox.valueChanged..."); }
 	    //if(!lse.getValueIsAdjusting()){
-		     if(!isChanging)
+	    if(!isChanging)
+		{
+		    isChanging = true;
+		    listNames.clearSelection();
+		    isChanging = false;
+		    
+		    index2 = searchedNames.getSelectedIndex();
+		    
+		    if (debug) { System.out.println("In SearchBox.valueChanged, inside if, index="+index); }
+			
+			
+		  
+			   
+		    String info = searchedList2.get(index2).printRecipe()+" ";
+		    
+		    recipeInfo.setText(info);                 
+		    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+		    recipeInfo.setPreferredSize(preferredSize);
+		    
+		    if(index2 >= 0)
 			{
-			    isChanging = true;
-			    listNames.clearSelection();
-			    isChanging = false;
-			
-			index2 = searchedNames.getSelectedIndex();
-			
-			if (debug) { System.out.println("In SearchBox.valueChanged, inside if, index="+index); }
-			
-			// String imageName=list.get(index).getImageName();    // FOR FILE SAVING ???
-     
-			String info = searchedList2.get(index2).printRecipe()+" ";
-		          
-			recipeInfo.setText(info);                 
-			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
-			recipeInfo.setPreferredSize(preferredSize);
-	       
-			recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
-			recipeInfo.repaint();
-			recipeInfo.revalidate();
-	        
-	        
+			    recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
+			    recipeInfo.repaint();
+			    recipeInfo.revalidate();
 			}
+	        
+		}
 	}
     }// end of Search
 
@@ -412,6 +388,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
 		    File file = ic.getSelectedFile();
 		    try{
+		       
 			//imageName=Recipe.setImageName(file);
 			image = ImageIO.read(file);
 			index = listNames.getSelectedIndex();
