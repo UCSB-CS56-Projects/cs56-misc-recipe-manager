@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.awt.Graphics;
-import java.util.HashMap;
 //import org.apache.commons.io.FileUtils;
 
 import javax.swing.ImageIcon;
@@ -32,13 +31,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
     public static final boolean debug=true;
     boolean isChanging = false;
-    //int recipeNumber=2;
     RecipeList list = loadList();
     RecipeList temp;
     
     JList listNames;
     JList searchedNames = new JList();
-    JScrollPane scroller2;
     RecipeList searchedList2 = new RecipeList();
     JList pictureList;
     DefaultListModel listModel;
@@ -53,7 +50,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     JPanel recipeBox;
     JPanel picture;
     BufferedImage image;
-    ImageIcon[] recipeIconList = new ImageIcon[10];
     ImageIcon recipeIcon;
     JFileChooser fc;
     JFileChooser ic;
@@ -201,18 +197,14 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			recipeInfo.setText(info);                 
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
-	       
-			//recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
-			recipeInfo.setIcon(recipeIcon);
-			    
-			/*
-			//imageArray[index] = new JLabel( recipeIcon);
-			if(imageArray[listNames.getSelectedIndex()]!=null){
-
-				contents.add(imageArray[listNames.getSelectedIndex()], BorderLayout.SOUTH);
-				recipeImage.revalidate();
-				recipeImage.repaint();
-				}*/
+			
+		
+			recipeInfo.setIcon(list.get(index).getRecipeIcon());
+			recipeInfo.repaint();
+			recipeInfo.revalidate();
+			//recipeInfo.updateUI();
+        
+			       
 		}
 
 
@@ -365,9 +357,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			}
 		   
 	       
-		//recipeInfo.setText(info);
-		
-		    //listNames.setModel(searchedListStrings);
+	    
 		    searchedNames.setModel(searchedListStrings);
 		    searchedNames.setVisibleRowCount(10);
 		    searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -399,8 +389,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			recipeInfo.setPreferredSize(preferredSize);
 	       
 			//recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
-			recipeInfo.setIcon(recipeIcon);
-		}
+			recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
+			recipeInfo.repaint();
+			recipeInfo.revalidate();
+			//recipeInfo.updateUI();
+			}
 	}
     }// end of Search
 
@@ -422,10 +415,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			//FileReader fd = new FileReader();
 			//list.get(index).setImageName(fd.getFileAsString(file));
 			recipeIcon = new ImageIcon(image);
-			recipeIconList[index] = recipeIcon;
-
-			recipeInfo.setIcon(recipeIcon);
-		       
+			list.get(index).setRecipeIcon(recipeIcon);		
+			recipeInfo.setIcon(list.get(index).getRecipeIcon());
 		    }catch(IOException ex){
 			ex.printStackTrace();
 		    }
@@ -442,16 +433,17 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	{
 	    try{
 		index = listNames.getSelectedIndex();
-		recipeIconList[index] = null;
 	    }
 	    catch(Exception ex)
 		{
 		    ex.printStackTrace();
 		}
 	    finally{
-		recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
-		recipeInfo.setIcon(recipeIcon);
-		recipeInfo.updateUI();
+		list.get(index).setRecipeIcon(null);
+		recipeInfo.setIcon(null);
+		recipeInfo.repaint();
+		recipeInfo.revalidate();
+		//recipeInfo.updateUI();
 	    }
 	}
     }//end of DeleteImage

@@ -1,6 +1,7 @@
 package edu.ucsb.cs56.S12.m_a_p.cp3;
 
 import java.io.Serializable;
+import javax.swing.ImageIcon;
 
 
 /** 
@@ -16,6 +17,7 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	private String description;
 	private String directions;
 	private String imageName;
+	private ImageIcon recipeIcon;
 	
 	/** 
 	a constructor that takes the names description and directions as prerameters and adds them to the Recipe
@@ -31,6 +33,12 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	}
 	public void setImageName(String imageName){
 	    this.imageName=imageName;
+	}
+	public void setRecipeIcon(ImageIcon image){
+	    this.recipeIcon = image;
+	}
+	public ImageIcon getRecipeIcon(){
+	    return recipeIcon;
 	}
 	/** 
 	one arg constructor that just adds the name
