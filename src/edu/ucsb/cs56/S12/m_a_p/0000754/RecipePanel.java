@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.awt.Graphics;
+import java.util.HashMap;
 //import org.apache.commons.io.FileUtils;
 
 import javax.swing.ImageIcon;
@@ -30,12 +31,15 @@ import javax.swing.filechooser.*;
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
 
     public static final boolean debug=true;
-
+    boolean isChanging = false;
     //int recipeNumber=2;
     RecipeList list = loadList();
     RecipeList temp;
     
     JList listNames;
+    JList searchedNames = new JList();
+    JScrollPane scroller2;
+    RecipeList searchedList2 = new RecipeList();
     JList pictureList;
     DefaultListModel listModel;
    
@@ -44,6 +48,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     
     int index = 0;
     int index2;
+    JPanel searchedPanel;
     JPanel RecipesListed;   
     JPanel recipeBox;
     JPanel picture;
@@ -74,7 +79,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		recipeInfo.setOpaque(true);
 
 		//make new scroll pane to hold recipe info
-		JScrollPane RecipeInfoScroller  = new JScrollPane(recipeInfo);
+		JScrollPane RecipeInfoScroller = new JScrollPane(recipeInfo);
 		Border titled = new TitledBorder("Info:");
 		RecipeInfoScroller .setBorder(titled); 
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -103,6 +108,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		Border titled2 = new TitledBorder("Recipe's");
 		RecipesListed.setBorder(titled2); 
 		RecipesListed.setBackground(Color.WHITE);
+		
+		//make a jpanel for the new SEARCH JList with a border
+		searchedPanel = new JPanel(new BorderLayout());
+		searchedPanel.add(searchedNames, BorderLayout.CENTER);
+		Border titled3 = new TitledBorder("Searched Recipes'");
+		searchedPanel.setBorder(titled3);
+		searchedPanel.setBackground(Color.WHITE);
 
 		//make new jpanel that holds the title label and recipe info 
 		recipeIcon = new ImageIcon();
@@ -147,6 +159,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		//add everything to this JPanel
 		add(RecipesListed, BorderLayout.LINE_START);
+		add(searchedPanel, BorderLayout.SOUTH);
 		add(menuBar , BorderLayout.PAGE_START);
 		add(contents , BorderLayout.CENTER);
 
@@ -170,8 +183,14 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public void valueChanged(ListSelectionEvent lse){
 
        	    if (debug) { System.out.println("In RecipePanel.valueChanged..."); }
-		if(!lse.getValueIsAdjusting()){
-			index = listNames.getSelectedIndex();
+	    //if(!lse.getValueIsAdjusting()){
+		    if(!isChanging)
+			{
+			    isChanging = true;
+			    searchedNames.clearSelection();
+			    isChanging = false;
+			
+		    index = listNames.getSelectedIndex();
 			
 			if (debug) { System.out.println("In RecipePanel.valueChanged, inside if, index="+index); }
 			
@@ -183,7 +202,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 			recipeInfo.setPreferredSize(preferredSize);
 	       
-			recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
+			//recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
 			recipeInfo.setIcon(recipeIcon);
 			    
 			/*
@@ -295,35 +314,44 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     }
     */
     //Search for recipes
-    public class SearchBox implements ActionListener{
+    public class SearchBox implements ActionListener, ListSelectionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0){
 	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
-	    String[] holdingList = new String[list.size()];
-	    for(int i = 0; i < list.size(); i++)
-		{
-		    holdingList[i] = list.get(i).toString();
-		}
-	    //listModel.copyInto(holdingList);
-	     DefaultListModel searchedList = new DefaultListModel();
-	       
+	    String lowerUserInput = userInput.toLowerCase();
+	    String delims = "[ ]+";
+	    String[] lowerUserInputTokens = lowerUserInput.split(delims);
+	    RecipeList searchedList = new RecipeList();
+	   
+    
 	    try{
-		for(String s: holdingList){
-		    if(userInput.matches(s))
-			{
-			    searchedList.addElement(s);
-			   
-			}
-		}
-	    }   
+		String delims2 = "[,.! ]+"; //get rid of these symbols in recipe
+		for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
+		    {
+			String[] recipeTokens = list.get(i).getName().toLowerCase().split(delims2); // array of strings that make up the recipe
+	        
+			for(String s: lowerUserInputTokens) //for loop compares each string within the array of user input strings and compares them to the strings in the recipeTokens list
+				{
+				    for(String s2: recipeTokens)
+					{    
+					    if(s.matches(s2)) //if there is a match add the recipe itself into a new list
+						{
+						    searchedList.add(list.get(i));
+						}
+					}
+				}
+		    }
+				   
+		
+	    }
 	    catch(Exception ex){
 		ex.printStackTrace();
 
 	    }
 	    finally{
-		
-		String info = new String();
-		int i = 0;
+		DefaultListModel searchedListStrings = new DefaultListModel();
+		searchedList2 = searchedList;
+       
 
 		if(searchedList.isEmpty())
 			    {
@@ -331,26 +359,53 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 				
 			    }
 		else{
-		    while(searchedList.get(0) != list.get(i).toString())
+		    for(int i=0; i<searchedList.size(); i++)
 			{
-			    i++;
+			    searchedListStrings.addElement(searchedList.get(i).toString());
 			}
-		    index = i;
+		   
 	       
 		//recipeInfo.setText(info);
 		
-		//listNames.setModel(searchedList);
-		    listNames.setSelectedIndex(index);
+		    //listNames.setModel(searchedListStrings);
+		    searchedNames.setModel(searchedListStrings);
+		    searchedNames.setVisibleRowCount(10);
+		    searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		    searchedNames.addListSelectionListener(this);
+		    searchedNames.setSelectedIndex(0);
 		}
 	    }
+	}
+	public void valueChanged(ListSelectionEvent lse){
+
+       	    if (debug) { System.out.println("In SearchBox.valueChanged..."); }
+	    //if(!lse.getValueIsAdjusting()){
+		     if(!isChanging)
+			{
+			    isChanging = true;
+			    listNames.clearSelection();
+			    isChanging = false;
+			
+			index2 = searchedNames.getSelectedIndex();
+			
+			if (debug) { System.out.println("In SearchBox.valueChanged, inside if, index="+index); }
+			
+			// String imageName=list.get(index).getImageName();    // FOR FILE SAVING ???
+     
+			String info = searchedList2.get(index2).printRecipe()+" ";
+		          
+			recipeInfo.setText(info);                 
+			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+			recipeInfo.setPreferredSize(preferredSize);
+	       
+			//recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
+			recipeInfo.setIcon(recipeIcon);
+		}
 	}
     }// end of Search
 
     
- 
-
-
-
+		
      			       
     public class ImageLoader implements ActionListener{
 	@Override
