@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.awt.Graphics;
-//import org.apache.commons.io.FileUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -29,28 +28,45 @@ import javax.swing.filechooser.*;
 
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
 
+    //debug boolean variable
     public static final boolean debug=true;
+    
+    //Boolean to check when different list items are being selected
+    boolean isChanging = false;
 
-    //int recipeNumber=2;
+    //RecipeList that holds all recipes that exists or added by user
     RecipeList list = loadList();
     RecipeList temp;
     
+    //JLists for main listNames and search list
     JList listNames;
+    JList searchedNames = new JList();
+    RecipeList searchedList2 = new RecipeList();
     JList pictureList;
     DefaultListModel listModel;
-   
+    
+    //JLabels to hold recipe information and images
     JLabel recipeInfo;
     JLabel recipeImage;
+    
+    //indexes that hold the selectedIndexes for list items
     int index = 0;
     int index2;
+    
+    //JPanels for components inside main JFrame
+    JPanel searchedPanel;
     JPanel RecipesListed;   
     JPanel recipeBox;
     JPanel picture;
+    //Buffered Image/ImageIcon to accept and load images for recipes
     BufferedImage image;
-    ImageIcon[] recipeIconList = new ImageIcon[10];
     ImageIcon recipeIcon;
+    
+    //FileChoosers for files and images to be loaded 
     JFileChooser fc;
     JFileChooser ic;
+    
+    //Main panel that holds everything
     JPanel contents = new JPanel(new BorderLayout());
     
 	/**
@@ -73,7 +89,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		recipeInfo.setOpaque(true);
 
 		//make new scroll pane to hold recipe info
-		JScrollPane RecipeInfoScroller  = new JScrollPane(recipeInfo);
+		JScrollPane RecipeInfoScroller = new JScrollPane(recipeInfo);
 		Border titled = new TitledBorder("Info:");
 		RecipeInfoScroller .setBorder(titled); 
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -102,10 +118,16 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		Border titled2 = new TitledBorder("Recipe's");
 		RecipesListed.setBorder(titled2); 
 		RecipesListed.setBackground(Color.WHITE);
+		
+		//make a jpanel for the new SEARCH JList with a border
+		searchedPanel = new JPanel(new BorderLayout());
+		searchedPanel.add(searchedNames, BorderLayout.CENTER);
+		Border titled3 = new TitledBorder("Searched Recipes'");
+		searchedPanel.setBorder(titled3);
+		searchedPanel.setBackground(Color.WHITE);
 
 		//make new jpanel that holds the title label and recipe info 
-		recipeIcon = new ImageIcon();
-		//JPanel contents = new JPanel(new BorderLayout());  
+		recipeIcon = new ImageIcon(); 
 		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
@@ -122,7 +144,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save recipe list");
 		JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image"); 
+		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete selected recipe image");
 		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for a recipe");
+		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for ingredients");
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
@@ -130,19 +154,23 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
 		newMenuItemImageLoad.addActionListener(new ImageLoader());
+		newMenuItemDeleteImage.addActionListener(new DeleteImage());
 		newMenuItemSearchBox.addActionListener(new SearchBox());
-
+		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
 		//add menu items to menu and add menu to menubar
 		m.add(newMenuItem);
 		m.add(newMenuItemDel);
 		m.add(newMenuItemLoadList);
 		m.add(newMenuItemSaveList);
 		m.add(newMenuItemImageLoad);
+		m.add(newMenuItemDeleteImage);
 		m.add(newMenuItemSearchBox);
+		m.add(newMenuItemSearchIngredientsBox);
 		menuBar.add(m);
 
 		//add everything to this JPanel
 		add(RecipesListed, BorderLayout.LINE_START);
+		add(searchedPanel, BorderLayout.SOUTH);
 		add(menuBar , BorderLayout.PAGE_START);
 		add(contents , BorderLayout.CENTER);
 
@@ -165,35 +193,38 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public void valueChanged(ListSelectionEvent lse){
 
-       	    if (debug) { System.out.println("In RecipePanel.valueChanged..."); }
-		if(!lse.getValueIsAdjusting()){
-			index = listNames.getSelectedIndex();
-			
-			if (debug) { System.out.println("In RecipePanel.valueChanged, inside if, index="+index); }
-			
-			// String imageName=list.get(index).getImageName();    // FOR FILE SAVING ???
-     
-			String info = printInfo() + " ";
-		          
-			recipeInfo.setText(info);                 
-			Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
-			recipeInfo.setPreferredSize(preferredSize);
-			recipeIcon = recipeIconList[index]; // TODO: FIXME!!!!
-			recipeInfo.setIcon(recipeIcon);
-			/*
-			//imageArray[index] = new JLabel( recipeIcon);
-			if(imageArray[listNames.getSelectedIndex()]!=null){
-
-				contents.add(imageArray[listNames.getSelectedIndex()], BorderLayout.SOUTH);
-				recipeImage.revalidate();
-				recipeImage.repaint();
-				}*/
+       	    //if (debug) { System.out.println("In RecipePanel.valueChanged..."); } DEBUG!
+	    if(!isChanging)
+		{
+		    // if list item is selected in main list, then deselect from Searched List
+		    isChanging = true;
+		    searchedNames.clearSelection();
+		    isChanging = false;
+		    
+		    index = listNames.getSelectedIndex();
+		    
+		    //if (debug) { System.out.println("In RecipePanel.valueChanged, inside if, index="+index); } DEBUG!
+		    
+		    String info = printInfo() + " ";
+		    
+		    recipeInfo.setText(info);                 
+		    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+		    recipeInfo.setPreferredSize(preferredSize);
+		    
+		    if(index >= 0)// makes sure index doesn't go out of bounds
+			{
+			    recipeInfo.setIcon(list.get(index).getRecipeIcon());
+			    recipeInfo.repaint();
+			    recipeInfo.revalidate();
+			}
+		    
+		    
 		}
-
-
+	    
+	    
 	}   
-
-
+    
+    
 	/**
     printInfo gets the selected recipe and returns a string with that information 
 	 */
@@ -250,95 +281,201 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public void actionPerformed(ActionEvent arg0) {
 	   
 	    index = listNames.getSelectedIndex();  
+	    list.get(index).setRecipeIcon(null);
 	    list.remove(index);	
 	    listModel.remove(index);
-
+	    
 	    listNames.setModel(listModel);
 	    listNames.setSelectedIndex(0);
-	    //saveList(list);
 	}
 
     }
 
-    /*
-    public class FileReader {
-
-	public String getFileAsString(File file){ FileInputStream fis = null;
-	    BufferedInputStream bis = null;
-	    DataInputStream dis = null;
-	    StringBuffer sb = new StringBuffer();
-	    try {
-		fis = new FileInputStream(file);
-		bis = new BufferedInputStream(fis);
-		dis = new DataInputStream(bis);
-		
-		while (dis.available() != 0) {
-		    sb.append( dis.readLine() +"\n");
-		}
-		fis.close();
-		bis.close();
-		dis.close();
-		
-	    } catch (FileNotFoundException e) {
-		e.printStackTrace();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	    return sb.toString();
-	}
-    }
-    */
+   
     //Search for recipes
-    public class SearchBox implements ActionListener{
+    public class SearchBox implements ActionListener, ListSelectionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0){
-	    String userInput = JOptionPane.showInputDialog(null, "Search for a recipe : ", "", 1);
-	    String[] holdingList = new String[list.size()];
-	    for(int i = 0; i < list.size(); i++)
-		{
-		    holdingList[i] = list.get(i).toString();
-		}
-	    //listModel.copyInto(holdingList);
-	     DefaultListModel searchedList = new DefaultListModel();
-	       
+	    String userInput = JOptionPane.showInputDialog("Search for a recipe : ");
+	    String lowerUserInput = userInput.toLowerCase();
+	    String delims = "[ ]+";
+	    String[] lowerUserInputTokens = lowerUserInput.split(delims);
+	    RecipeList searchedList = new RecipeList();
+	   
+    
 	    try{
-		for(String s: holdingList){
-		    if(userInput.matches(s))
-			{
-			    searchedList.addElement(s);
-			    //index2 = holdingList.indexOf(userInput);
-			}
-		}
-	    }   
+		String delims2 = "[,.! ]+"; //get rid of these symbols in recipe
+		for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
+		    {
+			String[] recipeTokens = list.get(i).getName().toLowerCase().split(delims2); // array of strings that make up the recipe
+	        
+			for(String s: lowerUserInputTokens) //compares input to recipe
+				{
+				    for(String s2: recipeTokens)
+					{    
+					    if(s.matches(s2)) //add to list if match for input
+						{
+						    searchedList.add(list.get(i));
+						}
+					}
+				}
+		    }
+				   
+		
+	    }
 	    catch(Exception ex){
 		ex.printStackTrace();
+
 	    }
 	    finally{
-		
-		String info = new String();
-		int i = 0;
-		
-		while(searchedList.get(0) != list.get(i).toString())
-		    {
-			i++;
-		    }
-		index = i;
-	       
-		//recipeInfo.setText(info);
-		
-		//listNames.setModel(searchedList);
-		listNames.setSelectedIndex(index);
-		
+		DefaultListModel searchedListStrings = new DefaultListModel();
+		searchedList2 = searchedList;
+		if(searchedList.isEmpty())
+			    {
+				JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			    }
+		else{
+		    for(int i=0; i<searchedList.size(); i++)
+			{
+			    searchedListStrings.addElement(searchedList.get(i).toString());
+			}
+		    searchedNames.setModel(searchedListStrings);
+		    searchedNames.setVisibleRowCount(10);
+		    searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		    searchedNames.addListSelectionListener(this);
+		    searchedNames.setSelectedIndex(0);
+		}
 	    }
 	}
-    }
+	public void valueChanged(ListSelectionEvent lse){
 
+	    // if (debug) { System.out.println("In SearchBox.valueChanged..."); } DEBUG TEST
+	    
+	    if(!isChanging)
+		{
+		    isChanging = true;
+		    listNames.clearSelection();
+		    isChanging = false;
+		    
+		    index2 = searchedNames.getSelectedIndex();
+		    
+		    //if (debug) { System.out.println("In SearchBox.valueChanged, inside if, index="+index); } DEBUG TEST
+		    String info = searchedList2.get(index2).printRecipe()+" ";
+		    
+		    recipeInfo.setText(info);                 
+		    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+		    recipeInfo.setPreferredSize(preferredSize);
+		    
+		    if(index2 >= 0)
+			{
+			    recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
+			    recipeInfo.repaint();
+			    recipeInfo.revalidate();
+			}
+	        
+		}
+	}
+    }// end of Search
+
+
+
+    //Search for recipes
+    public class SearchIngredientsBox implements ActionListener, ListSelectionListener{
+	@Override
+	public void actionPerformed(ActionEvent arg0){
+	    String userInput = JOptionPane.showInputDialog("Search for an Ingredient: ");
+	    String lowerUserInput = userInput.toLowerCase();
+	    String delims = "[ ]+";
+	    String[] lowerUserInputTokens = lowerUserInput.split(delims);
+	    RecipeList searchedList = new RecipeList();
+	   
     
- 
+	    try{
+		String delims2 = "[,-.! ]+"; //get rid of these symbols in recipe
+		for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
+		    {
+			String[] ingredientTokens = list.get(i).getDirections().toLowerCase().split(delims2); // array of strings that make up the recipe
+	        
+			for(String s: lowerUserInputTokens) //compares each string to each ingredient token
+				{
+				    for(String s2: ingredientTokens)
+					{    
+					    if(s.matches(s2)) //if input matches ingredient, add list
+						{
+						    searchedList.add(list.get(i));
+						}
+					}
+				}
+		    }
+		
+	    }
+	    catch(Exception ex){
+		ex.printStackTrace();
 
+	    }
+	    finally{
+		DefaultListModel searchedListStrings = new DefaultListModel();
+		searchedList2 = searchedList;
+		
+		
+		if(searchedList.isEmpty())
+		    {
+			JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+			
+		    }
+		else{
+		    for(int i=0; i<searchedList.size(); i++)
+			{
+			    if(!searchedListStrings.contains(searchedList.get(i).toString()))
+				{
+				    searchedListStrings.addElement(searchedList.get(i).toString());
+				}
+			}
+		    searchedNames.setModel(searchedListStrings);
+		    searchedNames.setVisibleRowCount(10);
+		    searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		    searchedNames.addListSelectionListener(this);
+		    searchedNames.setSelectedIndex(0);
+		}
+	    }
+	}
+	public void valueChanged(ListSelectionEvent lse){
+	    
+       	    //if (debug) { System.out.println("In SearchIngredientsBox.valueChanged..."); } DEBUG!
+	    
+	    if(!isChanging)
+		{
+		    // if list item in Searched List is selected, deselect from Main List
+		    isChanging = true;
+		    listNames.clearSelection();
+		    isChanging = false;
+		    
+		    index2 = searchedNames.getSelectedIndex();
+		    
+		    //  if (debug) { System.out.println("In SearchIngredientsBox.valueChanged, inside if, index="+index); } DEBUG!
+		    
 
-
-     			       
+		    if(!(index2<0)) //Makes sure that index2 doesn't go out of bounds
+			{
+			    String info = searchedList2.get(index2).printRecipe()+" "; //prints recipe
+			    
+			    recipeInfo.setText(info);                 
+			    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+			    recipeInfo.setPreferredSize(preferredSize);
+			    
+			    recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon()); //sets image
+			    recipeInfo.repaint();
+			    recipeInfo.revalidate();
+			}
+		    
+		}
+	}
+    }// end of Search Ingredients
+    
+    
+    
+    
     public class ImageLoader implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0)
@@ -346,41 +483,42 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    ic = new JFileChooser();
 	    int returnVal = ic.showOpenDialog(listNames);
 	    if (returnVal == JFileChooser.APPROVE_OPTION){
-		    File file = ic.getSelectedFile();
+		File file = ic.getSelectedFile();
 		    try{
-			//imageName=Recipe.setImageName(file);
 			image = ImageIO.read(file);
 			index = listNames.getSelectedIndex();
-			//FileReader fd = new FileReader();
-			//list.get(index).setImageName(fd.getFileAsString(file));
 			recipeIcon = new ImageIcon(image);
-			recipeIconList[index] = recipeIcon;
-			recipeInfo.setIcon(recipeIcon);
-		       
+			list.get(index).setRecipeIcon(recipeIcon);		
+			recipeInfo.setIcon(list.get(index).getRecipeIcon());
 		    }catch(IOException ex){
 			ex.printStackTrace();
 		    }
-    
+		    
 	    }
-
-	}/*
-	public JLabel printImage(){
-	    int index = listNames.getSelectedIndex();
-	    return imageArray[index];
+	    
 	}
-	 
-	public void valueChanged(ListSelectionEvent arg0)
-	{
-	    if(!arg0.getValueIsAdjusting())
-		{
-		    
-		    recipeInfo.setIcon(
-		    
-		}
+	
+    }// end of ImageLoader
 
+    public class DeleteImage implements ActionListener{
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+	    try{
+		index = listNames.getSelectedIndex();
+	    }
+	    catch(Exception ex)
+		{
+		    ex.printStackTrace();
 		}
-	 */
-    }
+	    finally{
+		list.get(index).setRecipeIcon(null);
+		recipeInfo.setIcon(null);
+		recipeInfo.repaint();
+		recipeInfo.revalidate();
+	    }
+	}
+    }//end of DeleteImage
 
 	/**
     an inner class that opens a recipeList based when the user presses the appropiate button 
@@ -397,11 +535,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(file));
 					list = (RecipeList) is.readObject();
-					//image = ImageIO.read(file);
-					//index = listNames.getSelectedIndex();
-					//recipeIcon = new ImageIcon(image);
-					//recipeIconList[index] = recipeIcon;
-					//recipeInfo.setIcon(recipeIcon);
 				} catch(Exception ex){
 					ex.printStackTrace(); 
 
@@ -411,13 +544,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					for(String s : listMembers)
 						listModel.addElement(s);
 					listNames.setModel(listModel);
-				       	listNames.setSelectedIndex(0);
+					listNames.setSelectedIndex(0);
 				}
-
-
 			}
-
-
 		}
 
 	}//end file loader
@@ -440,7 +569,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			ObjectOutputStream os = new ObjectOutputStream(fs);
 
 					os.writeObject(list);
-					//ImageIO.write(image,"JPEG",os);
 					os.close();
 				} catch(Exception ex) {
 					ex.printStackTrace();
