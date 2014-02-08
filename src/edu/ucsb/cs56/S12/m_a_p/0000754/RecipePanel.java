@@ -260,7 +260,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipeList recipes = new RecipeList(new Recipe("My First recipe"));
 
 		try {
-			URL url = new URL("http://www.cs.ucsb.edu/~m_a_p/cs56/S12/issues/0000754/browse/list.ser"); 
+			URL url = new URL("https://github.com/UCSB-CS56-Projects/cs56-misc-recipe-manager/raw/master/list.ser"); 
 			ObjectInputStream is = new ObjectInputStream(url.openStream());
 			recipes = (RecipeList) is.readObject();
 			return recipes;
