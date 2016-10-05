@@ -1,3 +1,7 @@
+<h2>#cs56-recipe-manager</h2>
+
+An application to manage a list of recipes
+
 project history
 ===============
 ```
@@ -34,9 +38,4 @@ Maybe the second one could be given to some students as a refactoring project, b
 
 
 
-
-
-#cs56-recipe-manager
-
-An application to manage a list of recipes
 
