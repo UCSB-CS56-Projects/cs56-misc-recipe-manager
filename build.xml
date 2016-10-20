@@ -1,15 +1,14 @@
 <project default="compile">
 
-  <!-- build.xml choicePoint1, S12, CS56
-       name: @@@ Michael Pahler @@@ -->
+  <!-- build.xml -->
    
-   <property environment="env"/> <!-- load the environment variables --> 
+   <property environment="env"/> <!-- load the environment variables -->
    <property name="webRoot" value="${env.HOME}/public_html/cs56" />
    <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S12/issues" />  
    <property name="mainClass" value="edu.ucsb.cs56.S12.m_a_p.cp3.Interface" />
    <property name="projectName" value="0000754" /> 
    <property name="javadocDest" value="${webRoot}/S12/issues/${projectName}/javadoc" /> 
-   <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" /> 
+   <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" />
    
 	
    <mkdir dir="build" />
