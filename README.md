@@ -1,12 +1,6 @@
-#cs56-recipe-manager
+#CS56 Recipe Manager
 
-An application to manage a list of recipes
-
-project history
-===============
-```
- N/A
-```
+A GUI application to manage a list of recipes. Recipe Manager allows you to easily create, edit, and save recipes for future use. 
 
 # MODERATOR NOTE
 The problem that I see with this project is that the package structure is in the old Mantis format 
@@ -23,9 +17,7 @@ class under the __*new*__ package structure. This issue has been discussed on st
 
 http://stackoverflow.com/questions/5305473/how-to-deal-with-a-java-serialized-object-whose-package-changed
 
-Now, the best solution would be to just create a new list.ser file with the new package structure... but when I try to temporarily comment out 
-the loading of the old serialized list, or when I try to locally create a list
-to pass into the "recipe list", I get other Java exceptions. What I want to do is just be able to run the GUI with the new package structure, create some simple recipes, and save a new list.ser file, to use in the future. Or the code could be refactored to simply read in the recipes in JSON, XML, or txt format.
+Now, the best solution would be to just create a new list.ser file with the new package structure... but when I try to temporarily comment out the loading of the old serialized list, or when I try to locally create a list to pass into the "recipe list", I get other Java exceptions. What I want to do is just be able to run the GUI with the new package structure, create some simple recipes, and save a new list.ser file, to use in the future. Or the code could be refactored to simply read in the recipes in JSON, XML, or txt format.
 
 ## Moderator TODO
 Two options
