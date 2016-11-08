@@ -1,4 +1,4 @@
- package edu.ucsb.cs56.S12.m_a_p.cp3;
+package edu.ucsb.cs56.projects.misc.recipe_manager;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,11 +20,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.*;
 
-/** RecipePanel is panel that holds all the components for the recipe cookbook 
-
-
+/**
+ * RecipePanel is panel that holds all
+ * the components for the recipe cookbook
  */
-
 
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
 
@@ -68,9 +67,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     
     //Main panel that holds everything
     JPanel contents = new JPanel(new BorderLayout());
-    
+
 	/**
-    no-arg constructor constructs the JPanel and adds all the components
+	 * No-arg constructor that initializes the JPanel and
+	 * adds and sets all the components within the JPanel
 	 */
 
     public RecipePanel(){
@@ -157,6 +157,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemDeleteImage.addActionListener(new DeleteImage());
 		newMenuItemSearchBox.addActionListener(new SearchBox());
 		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
+
 		//add menu items to menu and add menu to menubar
 		m.add(newMenuItem);
 		m.add(newMenuItemDel);
@@ -178,7 +179,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	}//end RecipePanel() no arg constructor
 
 	/**
-    action performed method that listens for the user to puch the button to add a recipe to the current list
+	 * Listens for the "add new recipe" button to be clicked and
+	 * then performs the corresponding action
+	 * @param event ActionEvent of "add new recipe"
 	 */
 
 	public void actionPerformed(ActionEvent event) {
@@ -187,9 +190,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	}//end actionPerformed method
 
 	/**
-    valueChanged listens for the user to select something on the JList 
+	 * Listens for the user to select something under the recipe list
+	 * @param lse ListSelectionEvent of a recipe being clicked on in the list
 	 */
-
 
 	public void valueChanged(ListSelectionEvent lse){
 
@@ -217,16 +220,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			    recipeInfo.repaint();
 			    recipeInfo.revalidate();
 			}
-		    
-		    
 		}
-	    
-	    
 	}   
     
-    
+
 	/**
-    printInfo gets the selected recipe and returns a string with that information 
+	 * Prints the information about the desired recipe
+	 * @return String representation of the recipe
 	 */
 
 	public String printInfo(){
@@ -235,10 +235,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		return list.get(index).printRecipe();      
 	}
 
-
-
 	/**
-    makes a list of the recipe names in a string array
+	 * Makes a String array of the recipe names
+	 * @return the array with recipe names
 	 */
 
 	public String[] makeRecipeList(){
@@ -251,10 +250,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		return listEntries;
 	}
 
-
 	/**
-    an inner class the loades a recipeList from a file when the program starts
+	 * Function that loads a RecipeList from a file when
+	 * the program begins
+	 * @return RecipeList of loaded recipes
 	 */
+
 	public RecipeList loadList(){
 
 		RecipeList recipes = new RecipeList(new Recipe("My First recipe"));
@@ -267,263 +268,324 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		} catch(Exception ex){
 			ex.printStackTrace();
 		}
-
-
 		return recipes;
 	}
 
 	/**
-    an inner class that deletes a recipe based on when the user presses the appropiate button 
+	 * Inner class that deletes a recipe when the
+	 * user clicks on the appropriate button
 	 */
     public class deleteRecipe implements ActionListener{
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-	   
-	    index = listNames.getSelectedIndex();  
-	    list.get(index).setRecipeIcon(null);
-	    list.remove(index);	
-	    listModel.remove(index);
-	    
-	    listNames.setModel(listModel);
-	    listNames.setSelectedIndex(0);
-	}
+		/**
+		 * Listens for the "delete selected recipe" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "delete selected recipe"
+		 */
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+
+			index = listNames.getSelectedIndex();
+			list.get(index).setRecipeIcon(null);
+			list.remove(index);
+			listModel.remove(index);
+
+			listNames.setModel(listModel);
+			listNames.setSelectedIndex(0);
+		}
 
     }
 
-   
-    //Search for recipes
+
+	/**
+	 * Inner class that allows for a user to search
+	 * for a desired recipe based on name
+	 */
+	//Search for recipes
     public class SearchBox implements ActionListener, ListSelectionListener{
-	@Override
-	public void actionPerformed(ActionEvent arg0){
-	    String userInput = JOptionPane.showInputDialog("Search for a recipe : ");
-	    String lowerUserInput = userInput.toLowerCase();
-	    String delims = "[ ]+";
-	    String[] lowerUserInputTokens = lowerUserInput.split(delims);
-	    RecipeList searchedList = new RecipeList();
-	   
-    
-	    try{
-		String delims2 = "[,.! ]+"; //get rid of these symbols in recipe
-		for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
-		    {
-			String[] recipeTokens = list.get(i).getName().toLowerCase().split(delims2); // array of strings that make up the recipe
-	        
-			for(String s: lowerUserInputTokens) //compares input to recipe
+
+		/**
+		 * Listens for the "search for a recipe" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "search for a recipe"
+		 */
+
+		@Override
+		public void actionPerformed(ActionEvent arg0){
+			String userInput = JOptionPane.showInputDialog("Search for a recipe : ");
+			String lowerUserInput = userInput.toLowerCase();
+			String delims = "[ ]+";
+			String[] lowerUserInputTokens = lowerUserInput.split(delims);
+			RecipeList searchedList = new RecipeList();
+
+
+			try{
+			String delims2 = "[,.! ]+"; //get rid of these symbols in recipe
+			for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
 				{
-				    for(String s2: recipeTokens)
-					{    
-					    if(s.matches(s2)) //add to list if match for input
+				String[] recipeTokens = list.get(i).getName().toLowerCase().split(delims2); // array of strings that make up the recipe
+
+				for(String s: lowerUserInputTokens) //compares input to recipe
+					{
+						for(String s2: recipeTokens)
 						{
-						    searchedList.add(list.get(i));
+							if(s.matches(s2)) //add to list if match for input
+							{
+								searchedList.add(list.get(i));
+							}
 						}
 					}
 				}
-		    }
-				   
-		
-	    }
-	    catch(Exception ex){
-		ex.printStackTrace();
 
-	    }
-	    finally{
-		DefaultListModel searchedListStrings = new DefaultListModel();
-		searchedList2 = searchedList;
-		if(searchedList.isEmpty())
-			    {
-				JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-				
-			    }
-		else{
-		    for(int i=0; i<searchedList.size(); i++)
-			{
-			    searchedListStrings.addElement(searchedList.get(i).toString());
+
 			}
-		    searchedNames.setModel(searchedListStrings);
-		    searchedNames.setVisibleRowCount(10);
-		    searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		    searchedNames.addListSelectionListener(this);
-		    searchedNames.setSelectedIndex(0);
-		}
-	    }
-	}
-	public void valueChanged(ListSelectionEvent lse){
+			catch(Exception ex){
+			ex.printStackTrace();
 
-	    // if (debug) { System.out.println("In SearchBox.valueChanged..."); } DEBUG TEST
-	    
-	    if(!isChanging)
-		{
-		    isChanging = true;
-		    listNames.clearSelection();
-		    isChanging = false;
-		    
-		    index2 = searchedNames.getSelectedIndex();
-		    
-		    //if (debug) { System.out.println("In SearchBox.valueChanged, inside if, index="+index); } DEBUG TEST
-		    String info = searchedList2.get(index2).printRecipe()+" ";
-		    
-		    recipeInfo.setText(info);                 
-		    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
-		    recipeInfo.setPreferredSize(preferredSize);
-		    
-		    if(index2 >= 0)
-			{
-			    recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
-			    recipeInfo.repaint();
-			    recipeInfo.revalidate();
 			}
-	        
+			finally{
+			DefaultListModel searchedListStrings = new DefaultListModel();
+			searchedList2 = searchedList;
+			if(searchedList.isEmpty())
+					{
+					JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+			else{
+				for(int i=0; i<searchedList.size(); i++)
+				{
+					searchedListStrings.addElement(searchedList.get(i).toString());
+				}
+				searchedNames.setModel(searchedListStrings);
+				searchedNames.setVisibleRowCount(10);
+				searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				searchedNames.addListSelectionListener(this);
+				searchedNames.setSelectedIndex(0);
+			}
+			}
 		}
-	}
-    }// end of Search
+
+		/**
+		 * Listens for the user to select something under the recipe list
+		 * based on the recipe search
+		 * @param lse ListSelectionEvent of a recipe being clicked on in the list
+		 */
+
+		public void valueChanged(ListSelectionEvent lse){
+
+			// if (debug) { System.out.println("In SearchBox.valueChanged..."); } DEBUG TEST
+
+			if(!isChanging)
+			{
+				isChanging = true;
+				listNames.clearSelection();
+				isChanging = false;
+
+				index2 = searchedNames.getSelectedIndex();
+
+				//if (debug) { System.out.println("In SearchBox.valueChanged, inside if, index="+index); } DEBUG TEST
+				String info = searchedList2.get(index2).printRecipe()+" ";
+
+				recipeInfo.setText(info);
+				Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+				recipeInfo.setPreferredSize(preferredSize);
+
+				if(index2 >= 0)
+				{
+					recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
+					recipeInfo.repaint();
+					recipeInfo.revalidate();
+				}
+
+			}
+		}
+	}// end of Search
 
 
 
-    //Search for recipes
+	/**
+	 * Inner class that allows for a user to search
+	 * for a desired recipe based on ingredients
+	 */
+
     public class SearchIngredientsBox implements ActionListener, ListSelectionListener{
-	@Override
-	public void actionPerformed(ActionEvent arg0){
-	    String userInput = JOptionPane.showInputDialog("Search for an Ingredient: ");
-	    String lowerUserInput = userInput.toLowerCase();
-	    String delims = "[ ]+";
-	    String[] lowerUserInputTokens = lowerUserInput.split(delims);
-	    RecipeList searchedList = new RecipeList();
-	   
-    
-	    try{
-		String delims2 = "[,-.! ]+"; //get rid of these symbols in recipe
-		for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
-		    {
-			String[] ingredientTokens = list.get(i).getDirections().toLowerCase().split(delims2); // array of strings that make up the recipe
-	        
-			for(String s: lowerUserInputTokens) //compares each string to each ingredient token
+
+		/**
+		 * Listens for the "search for ingredients" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "search for ingredients"
+		 */
+		@Override
+		public void actionPerformed(ActionEvent arg0){
+			String userInput = JOptionPane.showInputDialog("Search for an Ingredient: ");
+			String lowerUserInput = userInput.toLowerCase();
+			String delims = "[ ]+";
+			String[] lowerUserInputTokens = lowerUserInput.split(delims);
+			RecipeList searchedList = new RecipeList();
+
+
+			try{
+			String delims2 = "[,-.! ]+"; //get rid of these symbols in recipe
+			for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
 				{
-				    for(String s2: ingredientTokens)
-					{    
-					    if(s.matches(s2)) //if input matches ingredient, add list
+				String[] ingredientTokens = list.get(i).getDirections().toLowerCase().split(delims2); // array of strings that make up the recipe
+
+				for(String s: lowerUserInputTokens) //compares each string to each ingredient token
+					{
+						for(String s2: ingredientTokens)
 						{
-						    searchedList.add(list.get(i));
+							if(s.matches(s2)) //if input matches ingredient, add list
+							{
+								searchedList.add(list.get(i));
+							}
 						}
 					}
 				}
-		    }
-		
-	    }
-	    catch(Exception ex){
-		ex.printStackTrace();
 
-	    }
-	    finally{
-		DefaultListModel searchedListStrings = new DefaultListModel();
-		searchedList2 = searchedList;
-		
-		
-		if(searchedList.isEmpty())
-		    {
-			JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-			
-		    }
-		else{
-		    for(int i=0; i<searchedList.size(); i++)
-			{
-			    if(!searchedListStrings.contains(searchedList.get(i).toString()))
+			}
+			catch(Exception ex){
+			ex.printStackTrace();
+
+			}
+			finally{
+			DefaultListModel searchedListStrings = new DefaultListModel();
+			searchedList2 = searchedList;
+
+
+			if(searchedList.isEmpty())
 				{
-				    searchedListStrings.addElement(searchedList.get(i).toString());
-				}
-			}
-		    searchedNames.setModel(searchedListStrings);
-		    searchedNames.setVisibleRowCount(10);
-		    searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		    searchedNames.addListSelectionListener(this);
-		    searchedNames.setSelectedIndex(0);
-		}
-	    }
-	}
-	public void valueChanged(ListSelectionEvent lse){
-	    
-       	    //if (debug) { System.out.println("In SearchIngredientsBox.valueChanged..."); } DEBUG!
-	    
-	    if(!isChanging)
-		{
-		    // if list item in Searched List is selected, deselect from Main List
-		    isChanging = true;
-		    listNames.clearSelection();
-		    isChanging = false;
-		    
-		    index2 = searchedNames.getSelectedIndex();
-		    
-		    //  if (debug) { System.out.println("In SearchIngredientsBox.valueChanged, inside if, index="+index); } DEBUG!
-		    
+				JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
 
-		    if(!(index2<0)) //Makes sure that index2 doesn't go out of bounds
-			{
-			    String info = searchedList2.get(index2).printRecipe()+" "; //prints recipe
-			    
-			    recipeInfo.setText(info);                 
-			    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
-			    recipeInfo.setPreferredSize(preferredSize);
-			    
-			    recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon()); //sets image
-			    recipeInfo.repaint();
-			    recipeInfo.revalidate();
+				}
+			else{
+				for(int i=0; i<searchedList.size(); i++)
+				{
+					if(!searchedListStrings.contains(searchedList.get(i).toString()))
+					{
+						searchedListStrings.addElement(searchedList.get(i).toString());
+					}
+				}
+				searchedNames.setModel(searchedListStrings);
+				searchedNames.setVisibleRowCount(10);
+				searchedNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				searchedNames.addListSelectionListener(this);
+				searchedNames.setSelectedIndex(0);
 			}
-		    
+			}
 		}
-	}
-    }// end of Search Ingredients
-    
+
+		/**
+		 * Listens for the user to select something under the recipe list
+		 * based on the ingredient search
+		 * @param lse ListSelectionEvent of a recipe being clicked on in the list
+		 */
+		public void valueChanged(ListSelectionEvent lse){
+
+				//if (debug) { System.out.println("In SearchIngredientsBox.valueChanged..."); } DEBUG!
+
+			if(!isChanging)
+			{
+				// if list item in Searched List is selected, deselect from Main List
+				isChanging = true;
+				listNames.clearSelection();
+				isChanging = false;
+
+				index2 = searchedNames.getSelectedIndex();
+
+				//  if (debug) { System.out.println("In SearchIngredientsBox.valueChanged, inside if, index="+index); } DEBUG!
+
+
+				if(!(index2<0)) //Makes sure that index2 doesn't go out of bounds
+				{
+					String info = searchedList2.get(index2).printRecipe()+" "; //prints recipe
+
+					recipeInfo.setText(info);
+					Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
+					recipeInfo.setPreferredSize(preferredSize);
+
+					recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon()); //sets image
+					recipeInfo.repaint();
+					recipeInfo.revalidate();
+				}
+
+			}
+		}
+	}// end of Search Ingredients
+
     
     
     
     public class ImageLoader implements ActionListener{
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-	    ic = new JFileChooser();
-	    int returnVal = ic.showOpenDialog(listNames);
-	    if (returnVal == JFileChooser.APPROVE_OPTION){
-		File file = ic.getSelectedFile();
-		    try{
-			image = ImageIO.read(file);
-			index = listNames.getSelectedIndex();
-			recipeIcon = new ImageIcon(image);
-			list.get(index).setRecipeIcon(recipeIcon);		
-			recipeInfo.setIcon(list.get(index).getRecipeIcon());
-		    }catch(IOException ex){
-			ex.printStackTrace();
-		    }
-		    
-	    }
-	    
-	}
-	
-    }// end of ImageLoader
 
-    public class DeleteImage implements ActionListener{
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-	    try{
-		index = listNames.getSelectedIndex();
-	    }
-	    catch(Exception ex)
+		/**
+		 * Listens for the "search for ingredients" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "search for ingredients"
+		 */
+
+		@Override
+		public void actionPerformed(ActionEvent arg0)
 		{
-		    ex.printStackTrace();
+			ic = new JFileChooser();
+			int returnVal = ic.showOpenDialog(listNames);
+			if (returnVal == JFileChooser.APPROVE_OPTION){
+			File file = ic.getSelectedFile();
+				try{
+				image = ImageIO.read(file);
+				index = listNames.getSelectedIndex();
+				recipeIcon = new ImageIcon(image);
+				list.get(index).setRecipeIcon(recipeIcon);
+				recipeInfo.setIcon(list.get(index).getRecipeIcon());
+				}catch(IOException ex){
+				ex.printStackTrace();
+				}
+
+			}
+
 		}
-	    finally{
-		list.get(index).setRecipeIcon(null);
-		recipeInfo.setIcon(null);
-		recipeInfo.repaint();
-		recipeInfo.revalidate();
-	    }
-	}
+
+		}// end of ImageLoader
+
+	public class DeleteImage implements ActionListener{
+
+		/**
+		 * Listens for the "search for ingredients" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "search for ingredients"
+		 */
+
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			try{
+			index = listNames.getSelectedIndex();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			finally{
+			list.get(index).setRecipeIcon(null);
+			recipeInfo.setIcon(null);
+			recipeInfo.repaint();
+			recipeInfo.revalidate();
+			}
+		}
     }//end of DeleteImage
 
 	/**
-    an inner class that opens a recipeList based when the user presses the appropiate button 
+	 * Inner class that opens a recipeList
+	 * based when the user presses the appropriate button
 	 */
+
 	public class fileLoader implements ActionListener{
+
+		/**
+		 * Listens for the "load a recipe list" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "load a recipe list"
+		 */
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -552,9 +614,16 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	}//end file loader
 
 	/**
-    an inner class that saves a recipeList based when the user presses the appropiate button 
+	 * Inner class that saves a recipeList based when
+	 * the user presses the appropriate button
 	 */
 	public class fileSaver implements ActionListener{
+
+		/**
+		 * Listens for the "save the recipe" button to be clicked and
+		 * then performs the corresponding action
+		 * @param e ActionEvent of the "save the recipe"
+		 */
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -576,9 +645,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 			}
 		}
-
 	}//end of fileSaver
-
-
 
 }
