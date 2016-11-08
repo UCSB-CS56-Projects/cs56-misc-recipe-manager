@@ -3,7 +3,16 @@ javadoc/
 *~
 *.class
 
+# IntelliJ files #
+.idea/
+*.iml
+*.iws
+
 # Package Files #
 *.jar
 *.war
 *.ear
+
+# Mac files #
+.DS_Store
+Icon
