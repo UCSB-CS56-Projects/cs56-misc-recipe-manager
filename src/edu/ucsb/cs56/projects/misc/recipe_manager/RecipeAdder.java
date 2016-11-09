@@ -1,4 +1,4 @@
-package edu.ucsb.cs56.S12.m_a_p.cp3;
+package edu.ucsb.cs56.projects.misc.recipe_manager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-/** RecipeAdder is a frame with text areas to enter information about a new recipe 
-
+/**
+ *  RecipeAdder is a frame with text areas to enter
+ *  information about a new recipe
  */
 public class RecipeAdder extends JFrame {
 	Recipe newRecipe = new Recipe("");
@@ -33,8 +34,12 @@ public class RecipeAdder extends JFrame {
 	JList listNames;
 	Form form;
 
-	/** 
-	three-arg constructor that takes in the current list data and sets up the JFrame and components 
+	/**
+	 * three-arg constructor that takes in the current
+	 * list data and sets up the JFrame and components
+	 * @param listA RecipeList for the frame
+	 * @param listModelA DefaultListModel for the frame
+	 * @param listNamesA JList for the frame
 	 */
 
 	public RecipeAdder(RecipeList listA, DefaultListModel listModelA, JList listNamesA){
@@ -82,9 +87,9 @@ public class RecipeAdder extends JFrame {
 	}//end constructor 
 
 
-
-	/** 
-	inner class form sets up all the text fields so the usser can enter the recipe info
+	/**
+	 * Inner class form sets up all the text fields
+	 * so the user can enter the recipe info
 	 */
 	
 	@SuppressWarnings("serial")
@@ -92,6 +97,10 @@ public class RecipeAdder extends JFrame {
 		JLabel[] labels;
 		JComponent[] fields;
 		int fieldNum = 0;
+
+		/**
+		 * Constructor for the Form object
+		 */
 
 		public Form(){
 			String[] labelStrings = {
@@ -126,12 +135,12 @@ public class RecipeAdder extends JFrame {
 
 			addComponents();
 
-		}//end no-arg constructor
-		
-		
-		/** 
-		helper function that add all text fields to the form
+		}
+
+		/**
+		 * Helper function that add all text fields to the form
 		 */
+
 		public void addComponents(){
 
 			for(int i=0; i < fieldNum ; i++){       
@@ -150,12 +159,18 @@ public class RecipeAdder extends JFrame {
 
 	}//end form class
 
-
-
-	/** 
-	inner class that listens for the user to push the "add recipe" button
+	/**
+	 * Second inner class that listens for
+	 * the user to push the "add recipe" button
 	 */
+
 	public class bottonListener implements ActionListener {
+
+		/**
+		 * Listens for the "add recipe" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "add recipe"
+		 */
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -177,10 +192,19 @@ public class RecipeAdder extends JFrame {
 
 	}
 
-	/** 
-	inner class listener that waits for the more ingredients button to be pressed and adds more textfields 
+
+	/**
+	 * Third inner class listener that waits for the "more ingredients"
+	 * button to be pressed and adds more textfields
 	 */
+
 	public class moreIngredientsListener implements ActionListener {
+
+		/**
+		 * Listens for the "more ingredients" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "more ingredients"
+		 */
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
