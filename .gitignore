@@ -1,6 +1,3 @@
-Icon
-
-.DS_Store
 build/
 javadoc/
 *~
@@ -15,3 +12,6 @@ javadoc/
 *.jar
 *.war
 *.ear
+
+# Mac Files #
+.DS_Store
