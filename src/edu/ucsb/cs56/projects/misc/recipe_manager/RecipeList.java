@@ -1,24 +1,29 @@
-package edu.ucsb.cs56.S12.m_a_p.cp3;
+package edu.ucsb.cs56.projects.misc.recipe_manager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/** RecipeList represents a list of recipes
-
+/**
+ * RecipeList represents is an ArrayList of recipes
 */
+
 public class RecipeList extends ArrayList<Recipe> implements Serializable {
 
-	
+
 	/**
-    no-arg constructor makes a list with two empty slots
-	 */	
+	 * No-arg constructor makes a list with two empty slots
+	 */
+
 	RecipeList(){
 		super(2); 
 	}
-	
+
 	/**
-    one-recipe-arg constructor makes a list with one recipe added and one slot empty 
-	 */	
+	 * One-arg constructor that makes a list with one recipe added
+	 * and one empty slot for a recipe
+	 * @param r Recipe to be added to the list
+	 */
+
 	RecipeList(Recipe r){
 		super(2);
 		add(r);
