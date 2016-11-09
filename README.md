@@ -12,16 +12,8 @@ Features include searching for or scrolling through recipes and uploading pictur
 
 
 
+    Everything below this line was written by a previous student
 
-
-
-
-
-
-
-
-
-EVERYTHING BELOW THIS LINE WAS WRITTEN BY A PREVIOUS STUDENT
 
 # MODERATOR NOTE
 The problem that I see with this project is that the package structure is in the old Mantis format 
