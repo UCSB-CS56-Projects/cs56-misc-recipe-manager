@@ -1,1 +1,17 @@
-Icon
+Icon
+
+.DS_Store
+build/
+javadoc/
+*~
+*.class
+
+# IntelliJ files #
+.idea/
+*.iml
+*.iws
+
+# Package Files #
+*.jar
+*.war
+*.ear
