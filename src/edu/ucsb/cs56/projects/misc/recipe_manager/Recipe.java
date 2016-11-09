@@ -55,7 +55,7 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	/**
 	 * Method to compare if two recipes are equal
 	 * @param r recipe to be compared to
-	 * @return return 1 if equal, 0 if not
+	 * @return return 0 if equal, a positive if not
 	 */
 
 	public int compareTo(Recipe r) {
