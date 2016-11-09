@@ -21,7 +21,7 @@ public class IngredientsList extends ArrayList<String> implements Serializable {
 	     */
 	   
 	    public IngredientsList(String r) {
-		super(1); // we want capacity at least 1 
-		this.add(0,r);
+			super(1); // we want capacity at least 1
+			this.add(0,r);
 	    }   
 }
