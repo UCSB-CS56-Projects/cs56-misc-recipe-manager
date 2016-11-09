@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-# Created by .ignore support plugin (hsz.mobi)
 build/
 javadoc/
 *~
@@ -17,23 +15,3 @@ javadoc/
 
 # Mac files #
 .DS_Store
-=======
-build/
-javadoc/
-*~
-*.class
-
-# IntelliJ files #
-.idea/
-*.iml
-*.iws
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# Mac Files #
-.DS_Store
->>>>>>> 43128d93e772f397f19e8d5600a4b053a3a31998
-Icon
