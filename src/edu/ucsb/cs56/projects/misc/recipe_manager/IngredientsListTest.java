@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class IngredientsListTest {
-    
+
     @Test
     public void testEmptyIngredientsList() {
         IngredientsList empty = new IngredientsList();
