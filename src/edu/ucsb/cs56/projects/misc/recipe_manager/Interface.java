@@ -1,4 +1,4 @@
-package edu.ucsb.cs56.S12.m_a_p.cp3;
+package edu.ucsb.cs56.projects.misc.recipe_manager;
 
 import java.awt.Color;
 
@@ -6,15 +6,15 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 
-/** 
-interface is just the jframe that holds everything and main function
+/**
+ * Interface is just the jframe that holds everything and main function
  */
 public class Interface{
 
 	private static final long serialVersionUID = 1L;
 
-	/** 
-	main method
+	/**
+	 * main method
 	 */
 	public static void main(String[] args){
 		 JFrame frame = new JFrame();
