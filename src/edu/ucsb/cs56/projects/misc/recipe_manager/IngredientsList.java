@@ -13,7 +13,7 @@ public class IngredientsList extends ArrayList<String> implements Serializable {
 	 */
 	 public IngredientsList() {
 		    super(1); // we want capacity at least 1
-	        }
+	 }
 
 	/**
 	 * One argument constructor that takes in a string

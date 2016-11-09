@@ -17,7 +17,7 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	private String description;
 	private String directions;
 	private String imageName;
-	private ImageIcon recipeIcon;
+	//private ImageIcon recipeIcon;
 
 	/**
 	 * A constructor that takes the name, description, and
@@ -39,12 +39,8 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	public void setImageName(String imageName){
 	    this.imageName=imageName;
 	}
-	public void setRecipeIcon(ImageIcon image){
-	    this.recipeIcon = image;
-	}
-	public ImageIcon getRecipeIcon(){
-	    return recipeIcon;
-	}
+	//ublic void setRecipeIcon(ImageIcon image){this.recipeIcon = image;}
+	//public ImageIcon getRecipeIcon(){return recipeIcon;}
 
 	/**
 	 * One argument constructor that takes in the

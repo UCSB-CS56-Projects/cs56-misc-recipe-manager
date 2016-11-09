@@ -5,28 +5,24 @@
    <property environment="env"/> <!-- load the environment variables -->
    <property name="webRoot" value="${env.HOME}/public_html/cs56" />
    <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S12/issues" />  
-   <property name="mainClass" value="edu.ucsb.cs56.S12.m_a_p.cp3.Interface" />
+   <property name="mainClass" value="edu.ucsb.cs56.projects.misc.recipe_manager.Interface" />
    <property name="projectName" value="0000754" /> 
    <property name="javadocDest" value="${webRoot}/S12/issues/${projectName}/javadoc" /> 
    <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" />
+
+    <path id="project.class.path">
+        <pathelement location="build"/>
+        <pathelement location="lib/junit-4.8.2.jar"/>
+    </path>
    
 	
    <mkdir dir="build" />
 	
-	
-   <target name="compile" description="compile my code">	   
-	<delete dir="build/edu/ucsb/cs56/S12/m_a_p/cp3/images" />                            
-   	<mkdir dir="build/edu/ucsb/cs56/S12/m_a_p/cp3/images" />  
-	<copy todir="build/edu/ucsb/cs56/S12/m_a_p/cp3/images" >                           
-		<fileset dir="images"/>                                                            
-	</copy>        
-   	<javac srcdir="src" destdir="build" debug="true" debuglevel="lines,vars,source" includeantruntime="false">
-   		<classpath>                                                                                                                              
-        		<pathelement location="build"/>                                                                                                          
-        		<pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar"/>            
-		</classpath>            
-	</javac> 
-	   
+   <target name="compile" description="compile code">
+       <mkdir dir="build/edu/ucsb/cs56/projects/misc/recipe_manager"/>
+       <javac srcdir="src/edu/ucsb/cs56/projects/misc/recipe_manager" destdir="build" debug="true" debuglevel="lines,vars,source" includeantruntime="false">
+           <classpath refid="project.class.path"/>
+       </javac>
    </target>
 
 	
@@ -72,28 +68,20 @@
       <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" />                        
       <echo>Javadoc deployed to ${javadocURL}</echo>                                                 
                                                                                                   
-   </target>        
-  
-  
-  <target name="test" depends="compile" description="run the junit tests for this repo">
+   </target>
 
-    <junit haltonerror="no" haltonfailure="no">
-       <classpath>
-         <pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar"/>
-         <pathelement location="build"/>
-       </classpath>
 
-       <batchtest fork="yes">
-          <fileset dir="src">
-            <!-- this will pick up every class with a name ending in Test -->
-             <include name="**/*Test.java"/>
-          </fileset>
-       </batchtest>
-
-        <formatter type="plain" usefile="false" /> 
-       
-    </junit>
-  </target>
+    <target name="test" depends="compile" description="run JUnit tests">
+        <junit haltonerror="no" haltonfailure="no">
+            <classpath refid="project.class.path" />
+            <batchtest fork="yes">
+                <fileset dir="src">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+            <formatter type="brief" usefile="false" />
+        </junit>
+    </target>
   
 
 </project>
