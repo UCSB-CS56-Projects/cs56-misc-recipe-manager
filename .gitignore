@@ -13,6 +13,6 @@ javadoc/
 *.war
 *.ear
 
-# Mac files #
+# Mac Files #
 .DS_Store
 Icon
