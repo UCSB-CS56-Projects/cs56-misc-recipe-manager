@@ -9,6 +9,8 @@ import static org.junit.Assert.assertEquals;
 
 public class RecipePanelTest {
 
+    //robot.mouseMove(20,60); //move mouse to "File"
+
     private Robot robot;
 
     @Before
@@ -18,6 +20,11 @@ public class RecipePanelTest {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void test(){
+
     }
 
 }

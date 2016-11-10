@@ -27,7 +27,7 @@ public class RecipeAdder extends JFrame {
 	Recipe newRecipe = new Recipe("");
 
 	JTextField nameField, descriptionField, directionsField;
-	ArrayList<JTextField> ingredientFields  = new ArrayList<JTextField>();
+	ArrayList<JTextField> ingredientFields  = new ArrayList<>();
 
 	RecipeList list; 
 	DefaultListModel listModel;
