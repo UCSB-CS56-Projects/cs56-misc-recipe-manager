@@ -79,6 +79,32 @@ public class RecipeAdderTest {
     }
 
     @Test
+    public void testMoreIngredientsButtonThree(){
+        Dimension orig = new Dimension(515,411);
+        Dimension second = new Dimension(515,439);
+        Dimension third = new Dimension(515, 467);
+
+        //Click "More Ingredients"
+        assertEquals(adder.getSize(), orig);
+        robot.mouseMove(300,400);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(100);
+
+        //Confirm that the window increased in size
+        assertEquals(adder.getSize(), second);
+
+        //Click "More Ingredients" again
+        robot.mouseMove(300,428);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(50);
+
+        //Confirm a second click increases the window further
+        assertEquals(adder.getSize(), third);
+    }
+
+    @Test
     public void testAddingRecipeNameOnly() {
         robotType("apples");
 
