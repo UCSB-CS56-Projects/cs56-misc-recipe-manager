@@ -1,5 +1,6 @@
 package edu.ucsb.cs56.projects.misc.recipe_manager;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
@@ -27,7 +28,10 @@ public class RecipeAdder extends JFrame {
 	Recipe newRecipe = new Recipe("");
 
 	JTextField nameField, descriptionField, directionsField;
-	ArrayList<JTextField> ingredientFields  = new ArrayList<JTextField>();
+	ArrayList<JTextField> ingredientFields  = new ArrayList<>();
+
+	JButton button;
+	JButton button2;
 
 	RecipeList list; 
 	DefaultListModel listModel;
@@ -66,10 +70,10 @@ public class RecipeAdder extends JFrame {
 		ActionListener saveListener = new bottonListener();
 		ActionListener moreIngredientsListener = new moreIngredientsListener();
 
-		JButton button = new JButton("Add to list");
+		button = new JButton("Add to list");
 		button.addActionListener(saveListener);
 
-		JButton button2 = new JButton("More Ingredients");
+		button2 = new JButton("More Ingredients");
 		button2.addActionListener(moreIngredientsListener);
 
 		JPanel panel = new JPanel();
@@ -216,6 +220,18 @@ public class RecipeAdder extends JFrame {
 			pack();
 		}
 
+	}
+
+	public Point getAddToListButtonLoc(){
+		return button.getLocationOnScreen();
+	}
+
+	public Point getMoreIngredientsButtonLoc(){
+		return button2.getLocationOnScreen();
+	}
+
+	public Point getNameFieldLoc() {
+		return nameField.getLocationOnScreen();
 	}
 
 
