@@ -241,8 +241,13 @@ public class RecipePanelTest {
         robot.mouseRelease(mask);
         robot.delay(100);
         assertEquals(size, ContentPane.getRecipeList().size());
+    }
+
+    @Test
+    public void testAddNewRecipeAndSearch(){
 
     }
+
 
     /** TODO: Implement Search Ingredient and Search recipe test after pre loaded recipe fix. */
     /*re
@@ -263,8 +268,10 @@ public class RecipePanelTest {
     public void clickBoxCancel(){
         robot.delay(100);
         robotTab();
-        robot.delay(100);
-        robotTab();
+        if(!mac) {
+            robot.delay(100);
+            robotTab();
+        }
         robot.delay(100);
         robot.keyPress(KeyEvent.VK_SPACE);
         robot.delay(50);
