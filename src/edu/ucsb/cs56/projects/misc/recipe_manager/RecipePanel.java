@@ -20,6 +20,20 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.*;
 
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+
+
 /**
  * RecipePanel is panel that holds all
  * the components for the recipe cookbook
@@ -65,7 +79,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     //FileChoosers for files and images to be loaded 
     JFileChooser fc;
     JFileChooser ic;
-    
+
+	JMenu m;
+	JMenuBar menuBar;
+	RecipeAdder adder;
+
     //Main panel that holds everything
     JPanel contents = new JPanel(new BorderLayout());
 
@@ -75,7 +93,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	 */
 
     public RecipePanel(){
-	    super(new BorderLayout());  
+	    super(new BorderLayout());
 
 		//title image
 		//JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/title.jpg"), "title"),JLabel.CENTER);
@@ -92,9 +110,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		//make new scroll pane to hold recipe info
 		JScrollPane RecipeInfoScroller = new JScrollPane(recipeInfo);
 		Border titled = new TitledBorder("Info:");
-		RecipeInfoScroller .setBorder(titled); 
+		RecipeInfoScroller .setBorder(titled);
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);  
+		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		RecipeInfoScroller .setBackground(Color.WHITE);
 
 		//set up a list of recipes
@@ -107,7 +125,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		listNames = new JList(listModel);
 		JScrollPane scroller = new JScrollPane(listNames);
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);  
+		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		listNames.setVisibleRowCount(10);
 		listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listNames.addListSelectionListener(this);
@@ -117,9 +135,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipesListed = new JPanel(new BorderLayout());
 		RecipesListed.add(listNames, BorderLayout.CENTER);
 		Border titled2 = new TitledBorder("Recipe's");
-		RecipesListed.setBorder(titled2); 
+		RecipesListed.setBorder(titled2);
 		RecipesListed.setBackground(Color.WHITE);
-		
+
 		//make a jpanel for the new SEARCH JList with a border
 		searchedPanel = new JPanel(new BorderLayout());
 		searchedPanel.add(searchedNames, BorderLayout.CENTER);
@@ -127,7 +145,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		searchedPanel.setBorder(titled3);
 		searchedPanel.setBackground(Color.WHITE);
 
-		//make new jpanel that holds the title label and recipe info 
+		//make new jpanel that holds the title label and recipe info
 		//recipeIcon = new ImageIcon();
 		//contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
@@ -136,10 +154,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 
 		//makes a menu at top of frame
-		JMenuBar menuBar = new JMenuBar();
-		JMenu m = new JMenu("File");
+		menuBar = new JMenuBar();
+		m = new JMenu("File");
 
-		//makes menu items 
+		//makes menu items
 		JMenuItem newMenuItem = new JMenuItem("Add New Recipe");
 		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
@@ -185,9 +203,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	 * @param event ActionEvent of "add new recipe"
 	 */
 
-	public void actionPerformed(ActionEvent event) {
-		RecipeAdder adder = new RecipeAdder(list, listModel, listNames);
-
+	public void actionPerformed(ActionEvent event){
+		adder = new RecipeAdder(list, listModel, listNames);
 	}//end actionPerformed method
 
 	/**
@@ -204,17 +221,17 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		    isChanging = true;
 		    searchedNames.clearSelection();
 		    isChanging = false;
-		    
+
 		    index = listNames.getSelectedIndex();
-		    
+
 		    //if (debug) { System.out.println("In RecipePanel.valueChanged, inside if, index="+index); } DEBUG!
-		    
+
 		    String info = printInfo() + " ";
-		    
-		    recipeInfo.setText(info);                 
+
+		    recipeInfo.setText(info);
 		    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 		    recipeInfo.setPreferredSize(preferredSize);
-		    
+
 		    /*if(index >= 0)// makes sure index doesn't go out of bounds
 			{
 			    recipeInfo.setIcon(list.get(index).getRecipeIcon());
@@ -222,8 +239,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			    recipeInfo.revalidate();
 			}*/
 		}
-	}   
-    
+	}
+
 
 	/**
 	 * Prints the information about the desired recipe
@@ -233,7 +250,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public String printInfo(){
 		if(index > (list.size() - 1) || index < 0)
 			return "error";
-		return list.get(index).printRecipe();      
+		return list.get(index).printRecipe();
 	}
 
 	/**
@@ -262,7 +279,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		RecipeList recipes = new RecipeList(new Recipe("My First recipe"));
         /*
 		try {
-			URL url = new URL("https://github.com/UCSB-CS56-Projects/cs56-misc-recipe-manager/raw/master/list.ser"); 
+			URL url = new URL("https://github.com/UCSB-CS56-Projects/cs56-misc-recipe-manager/raw/master/list.ser");
 			ObjectInputStream is = new ObjectInputStream(url.openStream());
 			recipes = (RecipeList) is.readObject();
 			return recipes;
@@ -314,7 +331,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			String userInput = JOptionPane.showInputDialog("Search for a recipe : ");
+			String userInput = ingredient.showInputDialog("Search for a recipe : ");
+			if(userInput == null){
+				return;
+			}
 			String lowerUserInput = userInput.toLowerCase();
 			String delims = "[ ]+";
 			String[] lowerUserInputTokens = lowerUserInput.split(delims);
@@ -417,9 +437,14 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		 * then performs the corresponding action
 		 * @param arg0 ActionEvent of the "search for ingredients"
 		 */
+
+
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			String userInput = JOptionPane.showInputDialog("Search for an Ingredient: ");
+			String userInput = search.showInputDialog("Search for an Ingredient: ");
+			if(userInput == null){
+				return;
+			}
 			String lowerUserInput = userInput.toLowerCase();
 			String delims = "[ ]+";
 			String[] lowerUserInputTokens = lowerUserInput.split(delims);
@@ -514,8 +539,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		}
 	}// end of Search Ingredients
 
-    
-    
+
+
 
    /*public class ImageLoader implements ActionListener{
 
@@ -599,7 +624,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(file));
 					list = (RecipeList) is.readObject();
 				} catch(Exception ex){
-					ex.printStackTrace(); 
+					ex.printStackTrace();
 
 				} finally{
 					listModel = listModel = new DefaultListModel();
@@ -642,10 +667,61 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					os.close();
 				} catch(Exception ex) {
 					ex.printStackTrace();
-				}                  
+				}
 
 			}
 		}
 	}//end of fileSaver
 
+	public Point getFileButtonLoc(){
+		return m.getLocationOnScreen();
+	}
+
+	public Point getAddRecipeLocation(){
+		return m.getMenuComponent(0).getLocationOnScreen();
+	}
+
+	public Point getDeleteRecipeLocation(){
+		return m.getMenuComponent(1).getLocationOnScreen();
+	}
+
+	public Point getLoadRecipeLocation(){
+		return m.getMenuComponent(2).getLocationOnScreen();
+	}
+
+	public Point getSaveRecipeLocation(){
+		return m.getMenuComponent(3).getLocationOnScreen();
+	}
+
+	public Point getSearchRecipeLocation(){
+		return m.getMenuComponent(4).getLocationOnScreen();
+	}
+
+	public Point getSearchIngredientLocation(){
+		return m.getMenuComponent(5).getLocationOnScreen();
+	}
+
+	public JFrame getAdderWindow(){
+		return adder;
+	}
+
+	public RecipeList getRecipeList(){
+		return list;
+	}
+
+	public JFileChooser getFC(){
+		return fc;
+	}
+
+	JOptionPane search = new JOptionPane();
+
+	public JOptionPane getJOptionPane(){
+		return search;
+	}
+
+	JOptionPane ingredient = new JOptionPane();
+
+	public JOptionPane getJOptionIngredientPane(){
+		return ingredient;
+	}
 }
