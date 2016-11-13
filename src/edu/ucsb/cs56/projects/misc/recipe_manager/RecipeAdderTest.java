@@ -30,7 +30,7 @@ public class RecipeAdderTest {
 
 
     //If testing on a mac, set this true. For PC, set false.
-    boolean mac = true;
+    boolean mac = false;
 
     @Before
     public void init() {
@@ -50,18 +50,18 @@ public class RecipeAdderTest {
         robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
+        robot.delay(50);
 
         Dimension second = adder.getSize();
-
         heightDiff = second.height - orig.height;
-
         robot.delay(100);
-
     }
 
 
     @Test
     public void testMoreIngredientsButton(){
+
+        refreshWidgetLocations();
         Dimension orig = new Dimension(adder.getSize());
         Dimension after = new Dimension(adder.getWidth(), adder.getHeight() + heightDiff);
 
@@ -75,18 +75,20 @@ public class RecipeAdderTest {
 
     @Test
     public void testMoreIngredientsButtonTwice(){
+        refreshWidgetLocations();
+
         Dimension orig = new Dimension(adder.getSize());
         Dimension second = new Dimension(adder.getWidth(), adder.getHeight() + heightDiff);
         Dimension third = new Dimension(adder.getWidth(), adder.getHeight() + 2*heightDiff);
 
-        clickMoreIngredients();
+        clickMoreIngredients(); refreshWidgetLocations();
 
         //Confirm that the window increased in size
         assertEquals(adder.getSize(), second);
-        robot.delay(100);
 
         //Click "More Ingredients" again
         clickMoreIngredients();
+        refreshWidgetLocations();
 
         //Confirm a second click increases the window further
         assertEquals(adder.getSize(), third);
@@ -95,25 +97,27 @@ public class RecipeAdderTest {
 
     @Test
     public void testMoreIngredientsButtonLots(){
+        refreshWidgetLocations();
         Dimension orig = new Dimension(adder.getSize());
         Dimension second = new Dimension(adder.getWidth(), adder.getHeight() + heightDiff);
         Dimension third = new Dimension(adder.getWidth(), adder.getHeight() + 2*heightDiff);
         Dimension sixth = new Dimension(adder.getWidth(), adder.getHeight() + 5*heightDiff);
 
-        clickMoreIngredients();
+        clickMoreIngredients(); refreshWidgetLocations();
 
         //Confirm that the window increased in size
         assertEquals(adder.getSize(), second);
-        robot.delay(100);
 
         //Click "More Ingredients" again
-        clickMoreIngredients();
+        clickMoreIngredients(); refreshWidgetLocations();
 
         //Confirm a second click increases the window further
         assertEquals(adder.getSize(), third);
 
         //Click "More Ingredients" three more times
-        clickMoreIngredients(); clickMoreIngredients(); clickMoreIngredients();
+        clickMoreIngredients(); refreshWidgetLocations();
+        clickMoreIngredients(); refreshWidgetLocations();
+        clickMoreIngredients(); refreshWidgetLocations();
 
         //Confirm five clicks increases the window properly
         assertEquals(adder.getSize(), sixth);
@@ -127,7 +131,6 @@ public class RecipeAdderTest {
         robotType("apples");
 
         clickAddToList();
-
         robot.delay(50);
         //Confirm "apples" is the first element in the list
         assertEquals(list.get(0).toString(), "apples");
@@ -311,7 +314,7 @@ public class RecipeAdderTest {
         robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(50);
+        robot.delay(300);
     }
 
     private void clickAddToList() {
