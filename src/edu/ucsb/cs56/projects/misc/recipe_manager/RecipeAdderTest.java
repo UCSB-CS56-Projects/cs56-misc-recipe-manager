@@ -30,7 +30,7 @@ public class RecipeAdderTest {
 
 
     //If testing on a mac, set this true. For PC, set false.
-    boolean mac = false;
+    boolean mac = true;
 
     @Before
     public void init() {
@@ -47,10 +47,7 @@ public class RecipeAdderTest {
 
         refreshWidgetLocations();
 
-        robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(50);
+        clickMoreIngredients();
 
         Dimension second = adder.getSize();
         heightDiff = second.height - orig.height;

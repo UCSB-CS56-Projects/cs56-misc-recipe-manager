@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 
 public class RecipePanelTest {
 
-    boolean mac = false;
+    boolean mac = true;
 
 
     JFrame frame;
@@ -42,9 +42,9 @@ public class RecipePanelTest {
 
     @Test
     public void testAddNewRecipe(){
-        // robot.mouseMove();
-        // System.out.println(ContentPane.get);
         clickOnFile();
+        int size = ContentPane.getRecipeList().size();
+
         int addX = (int)ContentPane.getAddRecipeLocation().getX();
         int addY = (int)ContentPane.getAddRecipeLocation().getY();
         robot.mouseMove(addX, addY);
@@ -52,7 +52,14 @@ public class RecipePanelTest {
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
-        assertEquals(ContentPane.getAdderWindow().isActive(), true);
+        for(int x = 0; x < 11; x++){
+            robotTab();
+        }
+
+        robot.keyPress(KeyEvent.VK_SPACE);
+        robot.delay(50);
+        robot.keyRelease(KeyEvent.VK_SPACE);
+        assertEquals(ContentPane.getRecipeList().size(), size);
     }
 
     @Test
@@ -61,14 +68,15 @@ public class RecipePanelTest {
         int size = ContentPane.getRecipeList().size();
         int deleteX = (int)ContentPane.getDeleteRecipeLocation().getX();
         int deleteY = (int)ContentPane.getDeleteRecipeLocation().getY();
+        robot.delay(100);
         assertEquals(size, ContentPane.getRecipeList().size());
         robot.mouseMove(deleteX, deleteY);
-        robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(100);
+        robot.delay(500);
         assertEquals(size-1, ContentPane.getRecipeList().size());
     }
+
 
     @Test
     public void testLoadRecipe(){
@@ -79,7 +87,7 @@ public class RecipePanelTest {
         robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(1000);
+        robot.delay(500);
         assertEquals(ContentPane.getFC().isShowing(), true);
         robot.delay(100);
         ContentPane.getFC().cancelSelection();
@@ -144,7 +152,7 @@ public class RecipePanelTest {
         robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(100);
+        robot.delay(300);
 
         //Type "CinnamonApples"
         robotType("CinnamonApples");
@@ -193,7 +201,7 @@ public class RecipePanelTest {
         robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(100);
+        robot.delay(300);
 
         //Type "CinnamonApples"
         robotType("CinnamonApples");
@@ -227,7 +235,6 @@ public class RecipePanelTest {
         robot.delay(50);
         robot.keyRelease(KeyEvent.VK_SPACE);
         robot.delay(100);
-        assertEquals(size+1, ContentPane.getRecipeList().size());
 
         robot.delay(100);
         clickOnFile();
@@ -237,15 +244,9 @@ public class RecipePanelTest {
         robot.mouseMove(deleteX, deleteY);
         robot.delay(100);
         robot.mousePress(mask);
-        robot.delay(100);
         robot.mouseRelease(mask);
-        robot.delay(100);
+        robot.delay(500);
         assertEquals(size, ContentPane.getRecipeList().size());
-    }
-
-    @Test
-    public void testAddNewRecipeAndSearch(){
-
     }
 
 
@@ -303,4 +304,9 @@ public class RecipePanelTest {
         robot.delay(50);
     }
 
+    private void reinit() {
+        frame = new JFrame();
+        ContentPane = new RecipePanel();
+        frame.setContentPane(ContentPane);
+    }
 }
