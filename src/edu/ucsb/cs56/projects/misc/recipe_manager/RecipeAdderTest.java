@@ -19,6 +19,15 @@ public class RecipeAdderTest {
     private Robot robot;
     int mask = InputEvent.BUTTON1_DOWN_MASK;
     private RecipeAdder adder;
+    private int heightDiff;
+
+    int moreIngredientsButtonX;
+    int moreIngredientsButtonY;
+    int addToListButtonX;
+    int addToListButtonY;
+    int nameFieldX;
+    int nameFieldY;
+
 
     //If testing on a mac, set this true. For PC, set false.
     boolean mac = true;
@@ -34,107 +43,110 @@ public class RecipeAdderTest {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+        Dimension orig = adder.getSize();
+
+        refreshWidgetLocations();
+
+        robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+
+        Dimension second = adder.getSize();
+
+        heightDiff = second.height - orig.height;
+
+        robot.delay(100);
+
     }
+
 
     @Test
     public void testMoreIngredientsButton(){
-        Dimension orig = new Dimension(515,411);
-        Dimension after = new Dimension(515,439);
+        Dimension orig = new Dimension(adder.getSize());
+        Dimension after = new Dimension(adder.getWidth(), adder.getHeight() + heightDiff);
 
         //Click "More Ingredients"
-        assertEquals(adder.getSize(), orig);
-        robot.mouseMove(300,400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(100);
+        clickMoreIngredients();
 
         //Confirm that the window increased in size
         assertEquals(adder.getSize(), after);
     }
 
+
     @Test
     public void testMoreIngredientsButtonTwice(){
-        Dimension orig = new Dimension(515,411);
-        Dimension second = new Dimension(515,439);
-        Dimension third = new Dimension(515, 467);
+        Dimension orig = new Dimension(adder.getSize());
+        Dimension second = new Dimension(adder.getWidth(), adder.getHeight() + heightDiff);
+        Dimension third = new Dimension(adder.getWidth(), adder.getHeight() + 2*heightDiff);
 
-        //Click "More Ingredients"
-        assertEquals(adder.getSize(), orig);
-        robot.mouseMove(300,400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(100);
+        clickMoreIngredients();
 
         //Confirm that the window increased in size
         assertEquals(adder.getSize(), second);
+        robot.delay(100);
 
         //Click "More Ingredients" again
-        robot.mouseMove(300,428);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(50);
+        clickMoreIngredients();
 
         //Confirm a second click increases the window further
         assertEquals(adder.getSize(), third);
     }
 
-    @Test
-    public void testMoreIngredientsButtonThree(){
-        Dimension orig = new Dimension(515,411);
-        Dimension second = new Dimension(515,439);
-        Dimension third = new Dimension(515, 467);
 
-        //Click "More Ingredients"
-        assertEquals(adder.getSize(), orig);
-        robot.mouseMove(300,400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(100);
+    @Test
+    public void testMoreIngredientsButtonLots(){
+        Dimension orig = new Dimension(adder.getSize());
+        Dimension second = new Dimension(adder.getWidth(), adder.getHeight() + heightDiff);
+        Dimension third = new Dimension(adder.getWidth(), adder.getHeight() + 2*heightDiff);
+        Dimension sixth = new Dimension(adder.getWidth(), adder.getHeight() + 5*heightDiff);
+
+        clickMoreIngredients();
 
         //Confirm that the window increased in size
         assertEquals(adder.getSize(), second);
+        robot.delay(100);
 
         //Click "More Ingredients" again
-        robot.mouseMove(300,428);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(50);
+        clickMoreIngredients();
 
         //Confirm a second click increases the window further
         assertEquals(adder.getSize(), third);
+
+        //Click "More Ingredients" three more times
+        clickMoreIngredients(); clickMoreIngredients(); clickMoreIngredients();
+
+        //Confirm five clicks increases the window properly
+        assertEquals(adder.getSize(), sixth);
     }
 
     @Test
     public void testAddingRecipeNameOnly() {
+        //Get current widget locations, type "apples" into name field
+        refreshWidgetLocations();
+        clickInsideNameField();
         robotType("apples");
 
-        //Click "Add to list"
-        robot.mouseMove(200, 400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        clickAddToList();
 
-        //Confirm "apples" is the first element in the list
         robot.delay(50);
+        //Confirm "apples" is the first element in the list
         assertEquals(list.get(0).toString(), "apples");
     }
 
 
-
     @Test
     public void testAddingRecipeNameAndDescription() {
+        refreshWidgetLocations();
+        clickInsideNameField();
+
         //Type "apples"
         robotType("apples");
 
-        //Move to "description"
+        //Type description : "yum"
         robotTab();
-
-        //Type "yum"
         robotType("yum");
 
-        //Click "Add to list"
-        robot.mouseMove(200, 400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        clickAddToList();
 
         //Confirm "apples" is the first element in the list
         robot.delay(50);
@@ -144,28 +156,24 @@ public class RecipeAdderTest {
         assertEquals(list.get(0).getDescription(), "yum");
     }
 
+
     @Test
     public void testAddingRecipeNameDescriptionAndDirections() {
+        refreshWidgetLocations();
+        clickInsideNameField();
+
         //Type "apples"
         robotType("apples");
 
-        //Move to "description"
+        //Type description : "yum"
         robotTab();
-
-        //Type "yum"
         robotType("yum");
 
-        //Move to "directions"
+        //Type directions : "eat"
         robotTab();
-
-        //Type "eat"
         robotType("eat");
 
-        //Click "Add to list"
-        robot.mouseMove(200, 400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(50);
+        clickAddToList();
 
         //Confirm "apples" is the first element in the list
         assertEquals(list.get(0).toString(), "apples");
@@ -179,19 +187,18 @@ public class RecipeAdderTest {
 
     @Test
     public void testAddingRecipeNameDescriptionAndDirectionsAnd2Ingredients() {
-        //Type "apples"
+        refreshWidgetLocations();
+        clickInsideNameField();
+
+        //Type "CinnamonApples"
         robotType("CinnamonApples");
 
-        //Move to "description"
+        //Type description : "yum"
         robotTab();
-
-        //Type "yum"
         robotType("yum");
 
-        //Move to "directions"
+        //Type directions : "eat"
         robotTab();
-
-        //Type "eat"
         robotType("eat");
 
         //Move to "ingredients", add "apples" and "cinnamon"
@@ -200,11 +207,7 @@ public class RecipeAdderTest {
         robotTab();
         robotType("cinnamon");
 
-        //Click "Add to list"
-        robot.mouseMove(200, 400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(50);
+        clickAddToList();
 
         //Confirm "apples" is the first element in the list
         assertEquals(list.get(0).toString(), "CinnamonApples");
@@ -216,24 +219,23 @@ public class RecipeAdderTest {
         assertEquals(list.get(0).getList().get(0), "apples");
         assertEquals(list.get(0).getList().get(1), "cinnamon");
     }
-
+    /*
     //TODO:: Fix this test?
-    /*@Test
+    @Test
     public void testAddingRecipeNameDescriptionAndDirectionsAnd7Ingredients() {
+
+        refreshWidgetLocations();
+        clickInsideNameField();
 
         //Type "Cobbler"
         robotType("Cobbler");
 
-        //Move to "description"
+        //Type description "tasty"
         robotTab();
-
-        //Type "tasty"
         robotType("tasty");
 
-        //Move to "directions"
-        robotTab();
-
         //Type directions
+        robotTab();
         robotType("Mix the ingredients. Bake at 350.");
 
         //Move to "ingredients", add "apples", "cinnamon", "peaches", "sugar", "butter", "batter"
@@ -256,21 +258,11 @@ public class RecipeAdderTest {
         robotType("batter");
 
 
-        //Click "More Ingredients"
-        robot.mouseMove(300,400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(100);
+        //Add extra ingredient, eggs
+        clickMoreIngredients();
         robotType("eggs");
 
-        //Click "Add to list"
-        robot.mouseMove(200, 400);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
-        robot.delay(100);
+        clickAddToList();
 
         //Confirm "Cobbler" is the name of the recipe
         assertEquals(list.get(0).toString(), "Cobbler");
@@ -287,7 +279,6 @@ public class RecipeAdderTest {
         assertEquals(list.get(0).getList().get(4), "butter");
         assertEquals(list.get(0).getList().get(5), "batter");
         assertEquals(list.get(0).getList().get(6), "eggs");
-
     }*/
 
     //Helper function to type with robot
@@ -314,5 +305,35 @@ public class RecipeAdderTest {
         robot.keyPress(KeyEvent.VK_TAB);
         robot.keyRelease(KeyEvent.VK_TAB);
         robot.delay(50);
+    }
+
+    private void clickMoreIngredients() {
+        robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(50);
+    }
+
+    private void clickAddToList() {
+        robot.mouseMove(addToListButtonX, addToListButtonY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(50);
+    }
+
+    private void clickInsideNameField(){
+        robot.mouseMove(nameFieldX, nameFieldY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(50);
+    }
+
+    private void refreshWidgetLocations() {
+        moreIngredientsButtonX = adder.getMoreIngredientsButtonLoc().x + 5;
+        moreIngredientsButtonY = adder.getMoreIngredientsButtonLoc().y + 5;
+        addToListButtonX = adder.getAddToListButtonLoc().x + 5;
+        addToListButtonY = adder.getAddToListButtonLoc().y + 5;
+        nameFieldX = adder.getNameFieldLoc().x + 5;
+        nameFieldY = adder.getNameFieldLoc().y + 5;
     }
 }
