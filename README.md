@@ -4,6 +4,10 @@ A GUI application to manage a list of recipes. Recipe Manager allows you to easi
 
 * Everything below this line was written by a previous student
 
+# Testing Note #
+
+The test classes in this program use the Java Robot class, and rely on using the clipboard to paste text into fields. Since the keyboard shortcut is different on PC and Mac (Control+V or Command+V), our test classes need to take this into account before they are run. Simply update the boolean named 'mac' inside the RecipeAdderTest.java and RecipePanelTest.java classes to reflect your OS.
+
 # MODERATOR NOTE
 The problem that I see with this project is that the package structure is in the old Mantis format 
 of organizing code. Thus, everything is of the package `edu.ucsb.cs56.S12.m_a_p.cp3;`. When I tried to 
