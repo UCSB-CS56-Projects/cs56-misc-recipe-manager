@@ -1,8 +1,8 @@
 #CS56 Recipe Manager
 
-A GUI application to manage a list of recipes. Recipe Manager allows you to easily create, edit, and save recipes for future use. The user can then read through recipes in a convenient window, and never worry about misplacing recipes in the future.
+A GUI application to manage a list of recipes. Recipe Manager allows you to easily create, edit, and save recipes for future use. The user can then read through recipes in a convenient window, and never worry about misplacing recipes in the future. Features include searching for or scrolling through recipes and uploading pictures to your recipes.
 
-* Everything below this line was written by a previous student
+    Everything below this line was written by a previous student
 
 # MODERATOR NOTE
 The problem that I see with this project is that the package structure is in the old Mantis format 
@@ -21,7 +21,7 @@ http://stackoverflow.com/questions/5305473/how-to-deal-with-a-java-serialized-ob
 
 Now, the best solution would be to just create a new list.ser file with the new package structure... but when I try to temporarily comment out the loading of the old serialized list, or when I try to locally create a list to pass into the "recipe list", I get other Java exceptions. What I want to do is just be able to run the GUI with the new package structure, create some simple recipes, and save a new list.ser file, to use in the future. Or the code could be refactored to simply read in the recipes in JSON, XML, or txt format.
 
-## Moderator TODO
+## Moderator TODO / NOTE
 Two options
 
 * fix bug when trying to run GUI under new package structure, then save new list.ser file
