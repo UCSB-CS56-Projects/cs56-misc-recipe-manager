@@ -1,5 +1,4 @@
 #CS56 Recipe Manager
-
 A GUI application to manage a list of recipes. Recipe Manager allows you to easily create, edit, and save recipes for future use. The user can then read through recipes in a convenient window, and never worry about misplacing recipes in the future. Features include searching for or scrolling through recipes and uploading pictures to your recipes.
 
     Everything below this line was written by a previous student
