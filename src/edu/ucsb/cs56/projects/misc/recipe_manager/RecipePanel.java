@@ -96,7 +96,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	    super(new BorderLayout());
 
 		//title image
-		//JLabel titleLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/title.jpg"), "title"),JLabel.CENTER);
+		BufferedImage titleImage = null;
+		try {
+			titleImage = ImageIO.read(new File("images/title.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JLabel titleLabel = new JLabel(new ImageIcon(titleImage, "title"),JLabel.CENTER);
 
 		//Label that actually contains the recipe info
 		recipeInfo = new JLabel(printInfo());
@@ -147,7 +153,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		//make new jpanel that holds the title label and recipe info
 		//recipeIcon = new ImageIcon();
-		//contents.add(titleLabel , BorderLayout.NORTH);
+		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
 
