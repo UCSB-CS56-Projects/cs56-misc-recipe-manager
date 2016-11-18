@@ -55,12 +55,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     JList listNames;
     JList searchedNames = new JList();
     RecipeList searchedList2 = new RecipeList();
-    //JList pictureList;
+    JList pictureList;
     DefaultListModel listModel;
     
     //JLabels to hold recipe information and images
     JLabel recipeInfo;
-    //JLabel recipeImage;
+    JLabel recipeImage;
     
     //indexes that hold the selectedIndexes for list items
     int index = 0;
@@ -70,11 +70,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     JPanel searchedPanel;
     JPanel RecipesListed;   
     JPanel recipeBox;
-    //JPanel picture;
+	JPanel picture;
 
     //Buffered Image/ImageIcon to accept and load images for recipes
-    //BufferedImage image;
-    //ImageIcon recipeIcon;
+    BufferedImage image;
+    ImageIcon recipeIcon;
     
     //FileChoosers for files and images to be loaded 
     JFileChooser fc;
@@ -152,12 +152,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		searchedPanel.setBackground(Color.WHITE);
 
 		//make new jpanel that holds the title label and recipe info
-		//recipeIcon = new ImageIcon();
+		recipeIcon = new ImageIcon();
 		contents.add(titleLabel , BorderLayout.NORTH);
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
-
-
 
 		//makes a menu at top of frame
 		menuBar = new JMenuBar();
@@ -168,8 +166,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save recipe list");
-		//JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image");
-		//JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete selected recipe image");
+		JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image");
+		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete selected recipe image");
 		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for a recipe");
 		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for ingredients");
 
@@ -178,8 +176,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemDel.addActionListener(new deleteRecipe());
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
-		//newMenuItemImageLoad.addActionListener(new ImageLoader());
-		//newMenuItemDeleteImage.addActionListener(new DeleteImage());
+		newMenuItemImageLoad.addActionListener(new ImageLoader());
+		newMenuItemDeleteImage.addActionListener(new DeleteImage());
 		newMenuItemSearchBox.addActionListener(new SearchBox());
 		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
 
@@ -188,8 +186,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		m.add(newMenuItemDel);
 		m.add(newMenuItemLoadList);
 		m.add(newMenuItemSaveList);
-		//m.add(newMenuItemImageLoad);
-		//m.add(newMenuItemDeleteImage);
+		m.add(newMenuItemImageLoad);
+		m.add(newMenuItemDeleteImage);
 		m.add(newMenuItemSearchBox);
 		m.add(newMenuItemSearchIngredientsBox);
 		menuBar.add(m);
@@ -238,12 +236,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		    Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 		    recipeInfo.setPreferredSize(preferredSize);
 
-		    /*if(index >= 0)// makes sure index doesn't go out of bounds
+		    if(index >= 0)// makes sure index doesn't go out of bounds
 			{
 			    recipeInfo.setIcon(list.get(index).getRecipeIcon());
 			    recipeInfo.repaint();
 			    recipeInfo.revalidate();
-			}*/
+			}
 		}
 	}
 
@@ -311,7 +309,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		public void actionPerformed(ActionEvent arg0) {
 
 			index = listNames.getSelectedIndex();
-			//list.get(index).setRecipeIcon(null);
+			list.get(index).setRecipeIcon(null);
 			list.remove(index);
 			listModel.remove(index);
 
@@ -420,7 +418,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 				if(index2 >= 0)
 				{
-					//recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
+					recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon());
 					recipeInfo.repaint();
 					recipeInfo.revalidate();
 				}
@@ -536,7 +534,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					Dimension preferredSize  = new Dimension(300,info.lastIndexOf(" ")/2);
 					recipeInfo.setPreferredSize(preferredSize);
 
-					//recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon()); //sets image
+					recipeInfo.setIcon(searchedList2.get(index2).getRecipeIcon()); //sets image
 					recipeInfo.repaint();
 					recipeInfo.revalidate();
 				}
@@ -548,13 +546,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 
 
-   /*public class ImageLoader implements ActionListener{
+   public class ImageLoader implements ActionListener {
 
-		**
+		/**
 		 * Listens for the "search for ingredients" button to be clicked and
 		 * then performs the corresponding action
 		 * @param arg0 ActionEvent of the "search for ingredients"
-		 *
+		 */
 
 		@Override
 		public void actionPerformed(ActionEvent arg0)
@@ -575,9 +573,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 			}
 
-		}*/
+		}
 
-		// } end of ImageLoader
+   } //end of ImageLoader
 
 	public class DeleteImage implements ActionListener{
 
@@ -598,10 +596,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 				ex.printStackTrace();
 			}
 			finally{
-			//list.get(index).setRecipeIcon(null);
-			//recipeInfo.setIcon(null);
-			recipeInfo.repaint();
-			recipeInfo.revalidate();
+				list.get(index).setRecipeIcon(null);
+				recipeInfo.setIcon(null);
+				recipeInfo.repaint();
+				recipeInfo.revalidate();
 			}
 		}
     }//end of DeleteImage
@@ -633,7 +631,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 					ex.printStackTrace();
 
 				} finally{
-					listModel = listModel = new DefaultListModel();
+					listModel = new DefaultListModel();
 					String[] listMembers = makeRecipeList();
 					for(String s : listMembers)
 						listModel.addElement(s);
@@ -699,12 +697,20 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		return m.getMenuComponent(3).getLocationOnScreen();
 	}
 
-	public Point getSearchRecipeLocation(){
+	public Point getAddImageLocation(){
 		return m.getMenuComponent(4).getLocationOnScreen();
 	}
 
-	public Point getSearchIngredientLocation(){
+	public Point getDeleteImageLocation(){
 		return m.getMenuComponent(5).getLocationOnScreen();
+	}
+
+	public Point getSearchRecipeLocation(){
+		return m.getMenuComponent(6).getLocationOnScreen();
+	}
+
+	public Point getSearchIngredientLocation(){
+		return m.getMenuComponent(7).getLocationOnScreen();
 	}
 
 	public JFrame getAdderWindow(){

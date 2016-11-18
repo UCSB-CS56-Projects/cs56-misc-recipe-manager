@@ -19,7 +19,6 @@ public class RecipePanelTest {
 
     boolean mac = true;
 
-
     JFrame frame;
     int mask = InputEvent.BUTTON1_DOWN_MASK;
     RecipePanel ContentPane;
@@ -130,10 +129,10 @@ public class RecipePanelTest {
     @Test
     public void testSearchRecipeLocation(){
         clickOnFile();
+        //X&Y coords are wrong
         int addX = (int)ContentPane.getSearchRecipeLocation().getX();
         int addY = (int)ContentPane.getSearchRecipeLocation().getY();
         robot.mouseMove(addX, addY);
-        robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
@@ -277,7 +276,7 @@ public class RecipePanelTest {
         robot.keyPress(KeyEvent.VK_SPACE);
         robot.delay(50);
         robot.keyRelease(KeyEvent.VK_SPACE);
-}
+    }
 
     private void robotTab(){
         robot.keyPress(KeyEvent.VK_TAB);
