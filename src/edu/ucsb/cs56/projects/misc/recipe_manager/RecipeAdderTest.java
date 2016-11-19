@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RecipeAdderTest {
 
-    //If testing on a mac, set this true. For PC, set false.
+    //if testing this on pc (or another OS that uses CTRL+V to copy to the clipboard) set false
     boolean mac = true;
 
     RecipeList list;
@@ -250,7 +250,7 @@ public class RecipeAdderTest {
         robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(300);
+        robot.delay(500);
     }
 
     private void clickAddToList() {

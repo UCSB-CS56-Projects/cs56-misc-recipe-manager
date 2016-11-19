@@ -78,7 +78,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     
     //FileChoosers for files and images to be loaded 
     JFileChooser fc;
-    JFileChooser ic;
+	JFileChooser ic;
 
 	JMenu m;
 	JMenuBar menuBar;
@@ -140,7 +140,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		//make a jpanel for the new JList and give it a border
 		RecipesListed = new JPanel(new BorderLayout());
 		RecipesListed.add(listNames, BorderLayout.CENTER);
-		Border titled2 = new TitledBorder("Recipe's");
+		Border titled2 = new TitledBorder("Recipes");
 		RecipesListed.setBorder(titled2);
 		RecipesListed.setBackground(Color.WHITE);
 
@@ -164,12 +164,12 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		//makes menu items
 		JMenuItem newMenuItem = new JMenuItem("Add New Recipe");
 		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
-		JMenuItem newMenuItemLoadList = new JMenuItem("Load a recipe list");
-		JMenuItem newMenuItemSaveList = new JMenuItem("Save recipe list");
-		JMenuItem newMenuItemImageLoad = new JMenuItem("Load selected recipe image");
-		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete selected recipe image");
-		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for a recipe");
-		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for ingredients");
+		JMenuItem newMenuItemLoadList = new JMenuItem("Load Recipe List");
+		JMenuItem newMenuItemSaveList = new JMenuItem("Save Recipe List");
+		JMenuItem newMenuItemImageLoad = new JMenuItem("Add Image to Selected Recipe");
+		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete Image from Selected Recipe");
+		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for Recipe");
+		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for Ingredient");
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
@@ -280,7 +280,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public RecipeList loadList(){
 
-		RecipeList recipes = new RecipeList(new Recipe("My First recipe"));
+		RecipeList recipes = new RecipeList(new Recipe("Example recipe"));
         /*
 		try {
 			URL url = new URL("https://github.com/UCSB-CS56-Projects/cs56-misc-recipe-manager/raw/master/list.ser");
@@ -549,9 +549,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
    public class ImageLoader implements ActionListener {
 
 		/**
-		 * Listens for the "search for ingredients" button to be clicked and
+		 * Listens for the "Add Image to Selected Recipe" button to be clicked and
 		 * then performs the corresponding action
-		 * @param arg0 ActionEvent of the "search for ingredients"
 		 */
 
 		@Override
@@ -580,9 +579,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public class DeleteImage implements ActionListener{
 
 		/**
-		 * Listens for the "search for ingredients" button to be clicked and
+		 * Listens for the "Delete Image from Selected Recipe" button to be clicked and
 		 * then performs the corresponding action
-		 * @param arg0 ActionEvent of the "search for ingredients"
 		 */
 
 		@Override
@@ -614,7 +612,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		/**
 		 * Listens for the "load a recipe list" button to be clicked and
 		 * then performs the corresponding action
-		 * @param arg0 ActionEvent of the "load a recipe list"
 		 */
 
 		@Override
@@ -652,7 +649,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		/**
 		 * Listens for the "save the recipe" button to be clicked and
 		 * then performs the corresponding action
-		 * @param e ActionEvent of the "save the recipe"
 		 */
 
 		@Override
@@ -724,6 +720,9 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public JFileChooser getFC(){
 		return fc;
 	}
+	public JFileChooser getIc() {
+		return ic;
+	}
 
 	JOptionPane search = new JOptionPane();
 
@@ -736,4 +735,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public JOptionPane getJOptionIngredientPane(){
 		return ingredient;
 	}
+
+	public void setImageChooserToImagesFolder() { ic.setCurrentDirectory(new File("./images/")); }
 }
