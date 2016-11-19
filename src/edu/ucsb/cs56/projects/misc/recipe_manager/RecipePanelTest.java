@@ -122,7 +122,7 @@ public class RecipePanelTest {
         robot.delay(100);
 
     }
-
+    /*
     @Test
     public void testAddImageToRecipe(){
         clickOnFile();
@@ -188,7 +188,7 @@ public class RecipePanelTest {
 
         assertEquals(ContentPane.getRecipeList().get(0).getRecipeIcon(), null);
 
-    }
+    }*/
 
     @Test
     public void testSearchIngredient(){

@@ -557,6 +557,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		public void actionPerformed(ActionEvent arg0)
 		{
 			ic = new JFileChooser();
+			ic.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int returnVal = ic.showOpenDialog(listNames);
 			if (returnVal == JFileChooser.APPROVE_OPTION){
 			File file = ic.getSelectedFile();
