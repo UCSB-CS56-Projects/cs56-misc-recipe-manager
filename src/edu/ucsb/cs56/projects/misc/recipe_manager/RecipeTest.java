@@ -86,7 +86,7 @@ public class RecipeTest {
         testRecipe.setDirections("testDirections");
         testRecipe.setDescription("testDescription");
         assertEquals(testRecipe.printRecipe(), "<html>testName<br>testDescription<br><br> Ingredients: " +
-                "<br>apple<br><br><br><b> Directions:</b><br>testDirections</html>" );
+                "<br>\u2022 apple<br><br><br><b> Directions:</b><br>testDirections</html>" );
     }
 
 }

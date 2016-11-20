@@ -46,7 +46,7 @@ public class RecipeListTest {
         assertEquals(multi.size(), 3);
         assertEquals(multi.get(0), appleSauce);
         assertEquals(multi.get(2), cereal);
-        assertEquals(multi.get(2).getDirections(), "Pour cereal into bowl. Add milk");
+        assertEquals(multi.get(2).getDirections(), "\u2022 Pour cereal into bowl<br>\u2022  Add milk<br>");
         assertEquals(multi.get(1).getName(), "Spaghetti");
     }
 
