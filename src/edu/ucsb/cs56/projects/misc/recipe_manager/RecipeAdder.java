@@ -222,18 +222,25 @@ public class RecipeAdder extends JFrame {
 
 	}
 
+	/**
+	 * for debugging purposes - gets onscreen location of the JButton "Add to List"
+	 */
 	public Point getAddToListButtonLoc(){
 		return button.getLocationOnScreen();
 	}
 
+	/**
+	 * for debugging purposes - gets onscreen location of the JButton "More Ingredients"
+	 */
 	public Point getMoreIngredientsButtonLoc(){
 		return button2.getLocationOnScreen();
 	}
 
+	/**
+	 * for debugging purposes - gets onscreen location of the JTextField "name"
+	 */
 	public Point getNameFieldLoc() {
 		return nameField.getLocationOnScreen();
 	}
-
-
 
 }

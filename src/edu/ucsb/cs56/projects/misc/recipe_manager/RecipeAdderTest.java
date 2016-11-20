@@ -15,6 +15,9 @@ import static org.junit.Assert.assertEquals;
 
 public class RecipeAdderTest {
 
+    //if testing this on pc (or another OS that uses CTRL+V to copy to the clipboard) set false
+    boolean mac = true;
+
     RecipeList list;
     private Robot robot;
     int mask = InputEvent.BUTTON1_DOWN_MASK;
@@ -28,9 +31,6 @@ public class RecipeAdderTest {
     int nameFieldX;
     int nameFieldY;
 
-
-    //If testing on a mac, set this true. For PC, set false.
-    boolean mac = true;
 
     @Before
     public void init() {
@@ -219,67 +219,6 @@ public class RecipeAdderTest {
         assertEquals(list.get(0).getList().get(0), "apples");
         assertEquals(list.get(0).getList().get(1), "cinnamon");
     }
-    /*
-    //TODO:: Fix this test?
-    @Test
-    public void testAddingRecipeNameDescriptionAndDirectionsAnd7Ingredients() {
-
-        refreshWidgetLocations();
-        clickInsideNameField();
-
-        //Type "Cobbler"
-        robotType("Cobbler");
-
-        //Type description "tasty"
-        robotTab();
-        robotType("tasty");
-
-        //Type directions
-        robotTab();
-        robotType("Mix the ingredients. Bake at 350.");
-
-        //Move to "ingredients", add "apples", "cinnamon", "peaches", "sugar", "butter", "batter"
-        robotTab();
-        robotType("apples");
-
-        robotTab();
-        robotType("cinnamon");
-
-        robotTab();
-        robotType("peaches");
-
-        robotTab();
-        robotType("sugar");
-
-        robotTab();
-        robotType("butter");
-
-        robotTab();
-        robotType("batter");
-
-
-        //Add extra ingredient, eggs
-        clickMoreIngredients();
-        robotType("eggs");
-
-        clickAddToList();
-
-        //Confirm "Cobbler" is the name of the recipe
-        assertEquals(list.get(0).toString(), "Cobbler");
-        //Confirm the description of this recipe is "yum"
-        assertEquals(list.get(0).getDescription(), "yum");
-        //Confirm the directions of this recipe is "eat"
-        assertEquals(list.get(0).getDirections(), "eat");
-        //Confirm the IngredientsList contains "apples", "cinnamon", "peaches", "sugar", "butter", "batter", "eggs", size 7
-        assertEquals(list.get(0).getList().size(), 7);
-        assertEquals(list.get(0).getList().get(0), "apples");
-        assertEquals(list.get(0).getList().get(1), "cinnamon");
-        assertEquals(list.get(0).getList().get(2), "peaches");
-        assertEquals(list.get(0).getList().get(3), "sugar");
-        assertEquals(list.get(0).getList().get(4), "butter");
-        assertEquals(list.get(0).getList().get(5), "batter");
-        assertEquals(list.get(0).getList().get(6), "eggs");
-    }*/
 
     //Helper function to type with robot
     private void robotType(String word) {
@@ -311,7 +250,7 @@ public class RecipeAdderTest {
         robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(300);
+        robot.delay(500);
     }
 
     private void clickAddToList() {

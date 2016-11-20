@@ -8,17 +8,21 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-
-import javax.swing.JFrame;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 
 public class RecipePanelTest {
 
+    //if testing this on pc (or another OS that uses CTRL+V to copy to the clipboard) set false
     boolean mac = true;
-
 
     JFrame frame;
     int mask = InputEvent.BUTTON1_DOWN_MASK;
@@ -52,18 +56,21 @@ public class RecipePanelTest {
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
-        for(int x = 0; x < 11; x++){
+        for(int x = 0; x < 10; x++){
             robotTab();
         }
-
+        robot.delay(100);
         robot.keyPress(KeyEvent.VK_SPACE);
-        robot.delay(50);
         robot.keyRelease(KeyEvent.VK_SPACE);
-        assertEquals(ContentPane.getRecipeList().size(), size);
+        robot.delay(100);
+
+        assertEquals(ContentPane.getRecipeList().size(), size+1);
+
     }
 
     @Test
     public void testDeleteRecipe(){
+
         clickOnFile();
         int size = ContentPane.getRecipeList().size();
         int deleteX = (int)ContentPane.getDeleteRecipeLocation().getX();
@@ -74,7 +81,9 @@ public class RecipePanelTest {
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(500);
+
         assertEquals(size-1, ContentPane.getRecipeList().size());
+
     }
 
 
@@ -93,6 +102,7 @@ public class RecipePanelTest {
         ContentPane.getFC().cancelSelection();
         assertEquals(ContentPane.getFC().isShowing(), false);
         robot.delay(100);
+
     }
 
     @Test
@@ -110,7 +120,77 @@ public class RecipePanelTest {
         ContentPane.getFC().cancelSelection();
         assertEquals(ContentPane.getFC().isShowing(), false);
         robot.delay(100);
+
     }
+
+    //TODO:: Figure out cause of exception for the following 2 image tests
+    /*
+    @Test
+    public void testAddImageToRecipe(){
+        clickOnFile();
+        robot.delay(100);
+        int addImageX = ContentPane.getAddImageLocation().x;
+        int addImageY = ContentPane.getAddImageLocation().y;
+        robot.mouseMove(addImageX, addImageY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(500);
+
+        assertEquals(ContentPane.getIc().isShowing(), true);
+        assertEquals(ContentPane.getRecipeList().get(0).getRecipeIcon(), null);
+
+        robot.delay(500);
+        ContentPane.setImageChooserToImagesFolder();
+
+        if (mac) robotDown();
+        robotDown();
+        robotEnter();
+        robot.delay(500);
+
+        assertFalse(ContentPane.getRecipeList().get(0).getRecipeIcon().equals(null));
+
+    }
+
+    @Test
+    public void testAddImageToRecipeAndDelete(){
+
+        clickOnFile();
+        robot.delay(100);
+        int addImageX = ContentPane.getAddImageLocation().x;
+        int addImageY = ContentPane.getAddImageLocation().y;
+
+        robot.mouseMove(addImageX, addImageY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(500);
+
+        assertEquals(ContentPane.getIc().isShowing(), true);
+        assertEquals(ContentPane.getRecipeList().get(0).getRecipeIcon(), null);
+
+        robot.delay(501);
+        ContentPane.setImageChooserToImagesFolder();
+
+        if (mac) robotDown();
+        robotDown();
+        robotEnter();
+        robot.delay(500);
+
+        assertFalse(ContentPane.getRecipeList().get(0).getRecipeIcon().equals(null));
+        robot.delay(100);
+
+        clickOnFile();
+        robot.delay(100);
+        int delImageX = ContentPane.getDeleteImageLocation().x;
+        int delImageY = ContentPane.getDeleteImageLocation().y;
+
+        robot.mouseMove(delImageX, delImageY);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(500);
+
+        assertEquals(ContentPane.getRecipeList().get(0).getRecipeIcon(), null);
+
+    }*/
 
     @Test
     public void testSearchIngredient(){
@@ -122,9 +202,10 @@ public class RecipePanelTest {
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
-       // System.out.println(JOptionPane.CANCEL_OPTION);
+        //System.out.println(JOptionPane.CANCEL_OPTION);
         assertEquals(ContentPane.getJOptionPane().isVisible(), true);
-        clickBoxCancel();
+        clickCancelFromPopup();
+
     }
 
     @Test
@@ -133,12 +214,12 @@ public class RecipePanelTest {
         int addX = (int)ContentPane.getSearchRecipeLocation().getX();
         int addY = (int)ContentPane.getSearchRecipeLocation().getY();
         robot.mouseMove(addX, addY);
-        robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
         assertEquals(ContentPane.getJOptionIngredientPane().isVisible(), true);
-        clickBoxCancel();
+        clickCancelFromPopup();
+
     }
 
     @Test
@@ -187,6 +268,7 @@ public class RecipePanelTest {
         robot.keyRelease(KeyEvent.VK_SPACE);
         robot.delay(100);
         assertEquals(size+1, ContentPane.getRecipeList().size());
+
 
     }
 
@@ -251,38 +333,46 @@ public class RecipePanelTest {
 
 
     /** TODO: Implement Search Ingredient and Search recipe test after pre loaded recipe fix. */
-    /*re
 
-     */
 
     public void clickOnFile(){
         robot.delay(100);
         int fileX = (int)ContentPane.getFileButtonLoc().getX();
         int fileY = (int)ContentPane.getFileButtonLoc().getY();
         robot.mouseMove(fileX, fileY);
-        robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
     }
 
-    public void clickBoxCancel(){
+    public void clickCancelFromPopup(){
         robot.delay(100);
         robotTab();
         if(!mac) {
             robot.delay(100);
             robotTab();
         }
-        robot.delay(100);
         robot.keyPress(KeyEvent.VK_SPACE);
         robot.delay(50);
         robot.keyRelease(KeyEvent.VK_SPACE);
-}
+    }
 
     private void robotTab(){
         robot.keyPress(KeyEvent.VK_TAB);
         robot.keyRelease(KeyEvent.VK_TAB);
-        robot.delay(50);
+        robot.delay(100);
+    }
+
+    private void robotDown(){
+        robot.keyPress(KeyEvent.VK_DOWN);
+        robot.keyRelease(KeyEvent.VK_DOWN);
+        robot.delay(100);
+    }
+
+    private void robotEnter(){
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+        robot.delay(100);
     }
 
     private void robotType(String word) {
@@ -301,12 +391,6 @@ public class RecipePanelTest {
             robot.keyRelease(KeyEvent.VK_V);
             robot.keyRelease(KeyEvent.VK_CONTROL);
         }
-        robot.delay(50);
-    }
-
-    private void reinit() {
-        frame = new JFrame();
-        ContentPane = new RecipePanel();
-        frame.setContentPane(ContentPane);
+        robot.delay(100);
     }
 }

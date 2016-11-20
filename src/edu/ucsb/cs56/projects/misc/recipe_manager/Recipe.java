@@ -1,6 +1,7 @@
 package edu.ucsb.cs56.projects.misc.recipe_manager;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 
 
@@ -17,7 +18,7 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	private String description;
 	private String directions;
 	private String imageName;
-	//private ImageIcon recipeIcon;
+	private ImageIcon recipeIcon;
 
 	/**
 	 * A constructor that takes the name, description, and
@@ -36,12 +37,11 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	public String getImageName(){
 	    return imageName;
 	}
-
 	public void setImageName(String imageName){
 	    this.imageName=imageName;
 	}
-	//ublic void setRecipeIcon(ImageIcon image){this.recipeIcon = image;}
-	//public ImageIcon getRecipeIcon(){return recipeIcon;}
+	public void setRecipeIcon(ImageIcon image){this.recipeIcon = image;}
+	public ImageIcon getRecipeIcon(){return recipeIcon;}
 
 	/**
 	 * One argument constructor that takes in the
@@ -105,9 +105,17 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	 */
 
 	public String getDirections() {
-		if(directions == null || directions.equals("")) {	return directions;	}
+		if(directions == null || directions.equals("")) {return directions;}
 
-		return ("\u2022 " + directions);
+		String result = "";
+		String[] linesPeriodDelim = directions.split(Pattern.quote("."));
+		if (linesPeriodDelim.length > 1) {
+			for (int i = 0; i < linesPeriodDelim.length; i++) {
+				result += "\u2022 " + linesPeriodDelim[i] + "<br>";
+			}
+			return result;
+		}
+		return directions;
 	}
 
 	/**
@@ -170,7 +178,6 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	 */
 
 	public String printRecipe(){
-
 		return "<html>" +
 				this.getName() + 
 				"<br>" + this.getDescription() +
