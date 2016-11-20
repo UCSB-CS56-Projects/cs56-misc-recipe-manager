@@ -36,6 +36,7 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	public String getImageName(){
 	    return imageName;
 	}
+
 	public void setImageName(String imageName){
 	    this.imageName=imageName;
 	}
@@ -104,7 +105,9 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 	 */
 
 	public String getDirections() {
-		return directions;
+		if(directions == null || directions.equals("")) {	return directions;	}
+
+		return ("\u2022 " + directions);
 	}
 
 	/**
@@ -151,9 +154,14 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 		String ret = "";
 
 		for(String s : ingredientlist)
-			ret+= s + "<br>";
+			if(!s.equals("")) {
+				ret += "\u2022 " + s + "<br>";
+			}
+			else {
+				ret += s + "<br>";
+			}
 
-			return ret;     
+		return ret;
 	}
 
 	/**
