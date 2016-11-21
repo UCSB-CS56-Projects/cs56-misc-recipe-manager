@@ -250,7 +250,7 @@ public class RecipeAdderTest {
         robot.mouseMove(moreIngredientsButtonX, moreIngredientsButtonY);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
-        robot.delay(500);
+        robot.delay(700);
     }
 
     private void clickAddToList() {

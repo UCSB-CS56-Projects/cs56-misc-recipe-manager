@@ -280,16 +280,15 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public RecipeList loadList(){
 
-		RecipeList recipes = new RecipeList(new Recipe("Example recipe"));
-        /*
+		File sample = new File("SampleRecipeList.txt");
+
+		RecipeList recipes = new RecipeList(new Recipe("Example Recipe List"));
 		try {
-			URL url = new URL("https://github.com/UCSB-CS56-Projects/cs56-misc-recipe-manager/raw/master/list.ser");
-			ObjectInputStream is = new ObjectInputStream(url.openStream());
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream(sample));
 			recipes = (RecipeList) is.readObject();
-			return recipes;
-		} catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
-		}*/
+		}
 		return recipes;
 	}
 
@@ -618,6 +617,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			fc = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+			fc.setFileFilter(filter);
 			int returnVal = fc.showOpenDialog(listNames);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -658,11 +659,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			int returnVal = fc.showSaveDialog(listNames);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
+				File file = new File(fc.getSelectedFile() + ".txt");
 
 				try {
 					FileOutputStream fs = new FileOutputStream(file);
-			ObjectOutputStream os = new ObjectOutputStream(fs);
+					ObjectOutputStream os = new ObjectOutputStream(fs);
 
 					os.writeObject(list);
 					os.close();
