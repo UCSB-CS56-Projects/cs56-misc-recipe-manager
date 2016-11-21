@@ -22,7 +22,7 @@ import javax.swing.*;
 public class RecipePanelTest {
 
     //if testing this on pc (or another OS that uses CTRL+V to copy to the clipboard) set false
-    boolean mac = true;
+    boolean mac = false;
 
     JFrame frame;
     int mask = InputEvent.BUTTON1_DOWN_MASK;
@@ -56,7 +56,10 @@ public class RecipePanelTest {
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
-        for(int x = 0; x < 10; x++){
+        for(int x = 0; x < 9; x++){
+            robotTab();
+        }
+        if(mac){
             robotTab();
         }
         robot.delay(100);

@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class RecipeAdderTest {
 
     //if testing this on pc (or another OS that uses CTRL+V to copy to the clipboard) set false
-    boolean mac = true;
+    boolean mac = false;
 
     RecipeList list;
     private Robot robot;
