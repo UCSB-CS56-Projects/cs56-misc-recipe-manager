@@ -41,6 +41,9 @@ import javax.swing.JPanel;
 
 public class RecipePanel extends JPanel implements ActionListener, ListSelectionListener{
 
+	File recipeListSave;
+	String recipeListSaveLoc;
+
     //debug boolean variable
     public static final boolean debug=true;
     
@@ -170,6 +173,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete Image from Selected Recipe");
 		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for Recipe");
 		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for Ingredient");
+		JMenuItem newMenuItemDefaultRecipeList = new JMenuItem("Select Default Recipe List");
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
@@ -180,6 +184,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemDeleteImage.addActionListener(new DeleteImage());
 		newMenuItemSearchBox.addActionListener(new SearchBox());
 		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
+		newMenuItemDefaultRecipeList.addActionListener(new DefaultRecipeListSelector());
 
 		//add menu items to menu and add menu to menubar
 		m.add(newMenuItem);
@@ -190,6 +195,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		m.add(newMenuItemDeleteImage);
 		m.add(newMenuItemSearchBox);
 		m.add(newMenuItemSearchIngredientsBox);
+		m.add(newMenuItemDefaultRecipeList);
 		menuBar.add(m);
 
 		//add everything to this JPanel
@@ -197,7 +203,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		add(searchedPanel, BorderLayout.SOUTH);
 		add(menuBar , BorderLayout.PAGE_START);
 		add(contents , BorderLayout.CENTER);
-
 
 	}//end RecipePanel() no arg constructor
 
@@ -209,6 +214,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public void actionPerformed(ActionEvent event){
 		adder = new RecipeAdder(list, listModel, listNames);
+
 	}//end actionPerformed method
 
 	/**
@@ -279,18 +285,37 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	 */
 
 	public RecipeList loadList(){
-
-		File sample = new File("SampleRecipeList.txt");
-
+		loadRecipeListSaveLoc();
+		if (recipeListSaveLoc == null || recipeListSaveLoc.equals("")) {
+			recipeListSaveLoc = "SampleRecipeList.txt";
+		}
+		recipeListSave = new File(recipeListSaveLoc);
 		RecipeList recipes = new RecipeList(new Recipe("Example Recipe List"));
 		try {
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream(sample));
+			FileInputStream fs = new FileInputStream(recipeListSave);
+			ObjectInputStream is = new ObjectInputStream(fs);
 			recipes = (RecipeList) is.readObject();
+			is.close();
+			fs.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return recipes;
 	}
+
+	private void loadRecipeListSaveLoc() {
+		File locTextFile = new File ("RecipeSaveLocation.txt");
+		try {
+			FileInputStream fs = new FileInputStream(locTextFile);
+			ObjectInputStream is = new ObjectInputStream(fs);
+			recipeListSaveLoc = (String) is.readObject();
+			is.close();
+			fs.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 
 	/**
 	 * Inner class that deletes a recipe when the
@@ -317,12 +342,49 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		}
 
     }
+/*
+returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = new File(fc.getSelectedFile() + ".txt");
 
+				try {
+					FileOutputStream fs = new FileOutputStream(file);
+					ObjectOutputStream os = new ObjectOutputStream(fs);
+
+					os.writeObject(list);
+					os.close();
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+ */
+
+    public class DefaultRecipeListSelector implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			JFileChooser listSelector = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+			listSelector.setFileFilter(filter);
+			int returnVal = listSelector.showOpenDialog(listNames);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = listSelector.getSelectedFile();
+				recipeListSaveLoc = ""+file.getAbsoluteFile();
+				try {
+					FileOutputStream fs = new FileOutputStream("RecipeSaveLocation.txt");
+					ObjectOutputStream os = new ObjectOutputStream(fs);
+					os.writeObject(recipeListSaveLoc);
+					os.close();
+					fs.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
 
 	/**
 	 * Inner class that allows for a user to search
 	 * for a desired recipe based on name
 	 */
+
 	//Search for recipes
     public class SearchBox implements ActionListener, ListSelectionListener{
 
