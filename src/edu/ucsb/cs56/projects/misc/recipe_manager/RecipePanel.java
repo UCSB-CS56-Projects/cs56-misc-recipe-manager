@@ -218,7 +218,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public void valueChanged(ListSelectionEvent lse){
 
-       	    //if (debug) { System.out.println("In RecipePanel.valueChanged..."); } DEBUG!
+		//if (debug) { System.out.println("In RecipePanel.valueChanged..."); } DEBUG!
 	    if(!isChanging)
 		{
 		    // if list item is selected in main list, then deselect from Searched List
@@ -553,7 +553,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		 */
 
 		@Override
-		public void actionPerformed(ActionEvent arg0)
+	   public void actionPerformed(ActionEvent arg0)
 		{
 			ic = new JFileChooser();
 			ic.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -562,12 +562,18 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			File file = ic.getSelectedFile();
 				try{
 				image = ImageIO.read(file);
+
+				int newWidth = 400;
+				int newHeight = (int) ((double)image.getHeight()/(image.getWidth()/400.0));
+
+				Image scaled = image.getScaledInstance(newWidth,newHeight, Image.SCALE_DEFAULT);
+
 				index = listNames.getSelectedIndex();
-				recipeIcon = new ImageIcon(image);
+				recipeIcon = new ImageIcon(scaled);
 				list.get(index).setRecipeIcon(recipeIcon);
 				recipeInfo.setIcon(list.get(index).getRecipeIcon());
-				}catch(IOException ex){
-				ex.printStackTrace();
+				} catch (IOException ex) {
+					ex.printStackTrace();
 				}
 
 			}
