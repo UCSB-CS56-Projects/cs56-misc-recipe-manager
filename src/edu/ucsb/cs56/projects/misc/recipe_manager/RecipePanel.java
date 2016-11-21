@@ -147,7 +147,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		//make a jpanel for the new SEARCH JList with a border
 		searchedPanel = new JPanel(new BorderLayout());
 		searchedPanel.add(searchedNames, BorderLayout.CENTER);
-		Border titled3 = new TitledBorder("Searched Recipes'");
+		Border titled3 = new TitledBorder("Searched Recipes");
 		searchedPanel.setBorder(titled3);
 		searchedPanel.setBackground(Color.WHITE);
 
@@ -743,6 +743,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	public JOptionPane getJOptionIngredientPane(){
 		return ingredient;
 	}
-
+	//This method may be causing exception from RecipePanelTest.testAddImageToRecipe and RecipePanelTest.testAddImageToRecipeAndDelete
 	public void setImageChooserToImagesFolder() { ic.setCurrentDirectory(new File("./images/")); }
 }
