@@ -57,11 +57,15 @@ public class RecipePanelTest {
         robot.mouseRelease(mask);
         robot.delay(100);
         for(int x = 0; x < 9; x++){
+<<<<<<< HEAD
             robotTab();
         }
         if(mac){
+=======
+>>>>>>> issue26
             robotTab();
         }
+	if (mac) robotTab();
         robot.delay(100);
         robot.keyPress(KeyEvent.VK_SPACE);
         robot.keyRelease(KeyEvent.VK_SPACE);

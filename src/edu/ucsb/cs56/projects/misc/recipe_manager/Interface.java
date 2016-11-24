@@ -27,7 +27,7 @@ public class Interface{
          ContentPane.setOpaque(true); //make pane opaque
          
          frame.setContentPane(ContentPane);
-         frame.setSize(800,600); //width 800, height 600                                 
+         frame.setSize(1200,900); //width 1200, height 900
 	     frame. setVisible(true) ;
 	}
 	
