@@ -27,4 +27,4 @@ The code as is launches a GUI window with two sample recipes. The user can add a
 3. When the JFrame window is small, the user sometimes cannot see the entire recipe on the screen, even if they scroll
 4. Behavior of the searching functions is limited and inconsistent
 
-With some bug fixes and new features (see issues), this could be a flawless recipe manager.
+With some bug fixes and new features (see issues on main repo), this could be a flawless recipe manager.
