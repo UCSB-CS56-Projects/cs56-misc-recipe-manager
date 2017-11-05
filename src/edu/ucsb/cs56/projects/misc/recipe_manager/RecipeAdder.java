@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.JOptionPane;
 
 /**
  *  RecipeAdder is a frame with text areas to enter
@@ -178,6 +179,18 @@ public class RecipeAdder extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			boolean hasIngredients = false;
+			for(JTextField f : ingredientFields){
+				if(!f.getText().equals("")){
+					hasIngredients = true;
+					break;
+				}
+			}
+			if (nameField.getText().equals("") || descriptionField.getText().equals("") || directionsField.getText().equals("") || !hasIngredients) {
+				JOptionPane.showMessageDialog(null, "Please fill out all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+				dispose();
+				return;
+			}
 			Recipe recipe = new Recipe(nameField.getText(), descriptionField.getText(), directionsField.getText()); 
 
 			for(int i=0; i<ingredientFields.size(); i++)
