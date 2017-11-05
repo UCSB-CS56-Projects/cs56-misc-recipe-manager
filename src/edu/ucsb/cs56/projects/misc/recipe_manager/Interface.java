@@ -20,18 +20,14 @@ public class Interface{
 		 JFrame frame = new JFrame();
 	     frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
          
-	     Interface inter = new Interface();
+	     // Interface inter = new Interface(); // what does this do?
          JComponent ContentPane = new RecipePanel();
-         //ContentPane.setBackground(Color.WHITE);
          ContentPane.setBackground(Color.WHITE);
          ContentPane.setOpaque(true); //make pane opaque
-         
+       
          frame.setContentPane(ContentPane);
          frame.setSize(1200,900); //width 1200, height 900
 	     frame. setVisible(true) ;
 	}
 	
-	
-   
-
 }

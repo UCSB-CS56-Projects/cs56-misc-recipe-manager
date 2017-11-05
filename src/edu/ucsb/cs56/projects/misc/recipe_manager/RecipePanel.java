@@ -121,7 +121,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		Border titled = new TitledBorder("Info:");
 		RecipeInfoScroller .setBorder(titled);
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);		
 		RecipeInfoScroller .setBackground(Color.WHITE);
 
 		//set up a list of recipes
@@ -316,7 +316,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		}
 	}
 
-
 	/**
 	 * Inner class that deletes a recipe when the
 	 * user clicks on the appropriate button
@@ -416,6 +415,7 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 					{
 						for(String s2: recipeTokens)
 						{
+							System.out.println(s2);
 							if(s.matches(s2)) //add to list if match for input
 							{
 								searchedList.add(list.get(i));
@@ -433,6 +433,7 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 			finally{
 			DefaultListModel searchedListStrings = new DefaultListModel();
 			searchedList2 = searchedList;
+
 			if(searchedList.isEmpty())
 					{
 					JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -517,15 +518,17 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 
 
 			try{
-			String delims2 = "[,-.! ]+"; //get rid of these symbols in recipe
-			for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
-				{
+			//String delims2 = "[,-.!/() ]+"; //get rid of these symbols in recipe
+			String delims2 = "\\P{Alpha}+";
+			/*for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
+			{
 				String[] ingredientTokens = list.get(i).getDirections().toLowerCase().split(delims2); // array of strings that make up the recipe
 
 				for(String s: lowerUserInputTokens) //compares each string to each ingredient token
 					{
 						for(String s2: ingredientTokens)
 						{
+							System.out.println(s2);
 							if(s.matches(s2)) //if input matches ingredient, add list
 							{
 								searchedList.add(list.get(i));
@@ -534,7 +537,25 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 					}
 				}
 
+			}*/
+			
+				for (int i = 0; i < list.size(); i++) {
+					for (int j = 0; j < list.get(i).getList().size(); j++) {
+						String[] ingredientTokens = list.get(i).getList().get(j).toLowerCase().split(delims2);
+						for (String s : ingredientTokens) {
+							System.out.println(s);
+						}
+						for (String s : lowerUserInputTokens) {
+							for (String s2 : ingredientTokens) {
+								if (s.matches(s2)){
+									searchedList.add(list.get(i));
+								}
+							}
+						}
+					}
+				}
 			}
+
 			catch(Exception ex){
 			ex.printStackTrace();
 
