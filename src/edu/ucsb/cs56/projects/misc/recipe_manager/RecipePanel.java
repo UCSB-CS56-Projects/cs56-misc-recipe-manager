@@ -330,7 +330,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
+			if(list.size() == 1){
+				JOptionPane.showMessageDialog(null, "A recipe list must have at least one recipe.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			index = listNames.getSelectedIndex();
 			list.get(index).setRecipeIcon(null);
 			list.remove(index);
