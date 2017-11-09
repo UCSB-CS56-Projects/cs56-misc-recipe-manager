@@ -17,7 +17,7 @@ public class Interface{
 	 * main method
 	 */
 	public static void main(String[] args){
-		 JFrame frame = new JFrame();
+		 JFrame frame = new JFrame("Recipe Manager");
 	     frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
          
 	     // Interface inter = new Interface(); // what does this do?
