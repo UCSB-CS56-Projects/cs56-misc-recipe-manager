@@ -108,10 +108,10 @@ public class Recipe implements Comparable<Recipe>, Serializable {
 		if(directions == null || directions.equals("")) {return directions;}
 
 		String result = "";
-		String[] linesPeriodDelim = directions.split(Pattern.quote("."));
-		if (linesPeriodDelim.length > 1) {
-			for (int i = 0; i < linesPeriodDelim.length; i++) {
-				result += "\u2022 " + linesPeriodDelim[i] + "<br>";
+		String[] linesNewlineDelim = directions.split(Pattern.quote("\n"));
+		if (linesNewlineDelim.length > 1) {
+			for (int i = 0; i < linesNewlineDelim.length; i++) {
+				result += "\u2022 " + linesNewlineDelim[i] + "<br>";
 			}
 			return result;
 		}

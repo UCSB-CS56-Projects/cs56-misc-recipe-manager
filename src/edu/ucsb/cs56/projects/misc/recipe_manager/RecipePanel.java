@@ -72,13 +72,8 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     //JPanels for components inside main JFrame
     JPanel searchedPanel;
     JPanel RecipesListed;   
-    JPanel newMenuUI;
     JPanel recipeBox;
 	JPanel picture;
-
-	//Buttons for new men
-	JButton menu1;
-	JButton menu2; 
 
     //Buffered Image/ImageIcon to accept and load images for recipes
     BufferedImage image;
@@ -170,15 +165,15 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		m = new JMenu("File");
 
 		//makes menu items
-		JButton newMenuItem = new JButton("Add New Recipe");
-		JButton newMenuItemDel = new JButton("Delete Selected Recipe");
-		JButton newMenuItemLoadList = new JButton("Load Recipe List");
-		JButton newMenuItemSaveList = new JButton("Save Recipe List");
-		JButton newMenuItemImageLoad = new JButton("Add Image to Selected Recipe");
-		JButton newMenuItemDeleteImage = new JButton("Delete Image from Selected Recipe");
-		JButton newMenuItemSearchBox = new JButton("Search for Recipe");
-		JButton newMenuItemSearchIngredientsBox = new JButton("Search for Ingredient");
-		JButton newMenuItemDefaultRecipeList = new JButton("Select Default Recipe List");
+		JMenuItem newMenuItem = new JMenuItem("Add New Recipe");
+		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
+		JMenuItem newMenuItemLoadList = new JMenuItem("Load Recipe List");
+		JMenuItem newMenuItemSaveList = new JMenuItem("Save Recipe List");
+		JMenuItem newMenuItemImageLoad = new JMenuItem("Add Image to Selected Recipe");
+		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete Image from Selected Recipe");
+		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for Recipe");
+		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for Ingredient");
+		JMenuItem newMenuItemDefaultRecipeList = new JMenuItem("Select Default Recipe List");
 
 		//add action listeners for menu items
 		newMenuItem.addActionListener(this);
@@ -191,26 +186,23 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
 		newMenuItemDefaultRecipeList.addActionListener(new DefaultRecipeListSelector());
 
-
-		//set up new Menu UI
-		newMenuUI = new JPanel(new GridLayout(3,3));
-		newMenuUI.add(newMenuItem);
-		newMenuUI.add(newMenuItemDel);
-		newMenuUI.add(newMenuItemLoadList);
-		newMenuUI.add(newMenuItemSaveList);
-		newMenuUI.add(newMenuItemImageLoad);
-		newMenuUI.add(newMenuItemDeleteImage);
-		newMenuUI.add(newMenuItemSearchBox);
-		newMenuUI.add(newMenuItemSearchIngredientsBox);
-		newMenuUI.add(newMenuItemDefaultRecipeList);
+		//add menu items to menu and add menu to menubar
+		m.add(newMenuItem);
+		m.add(newMenuItemDel);
+		m.add(newMenuItemLoadList);
+		m.add(newMenuItemSaveList);
+		m.add(newMenuItemImageLoad);
+		m.add(newMenuItemDeleteImage);
+		m.add(newMenuItemSearchBox);
+		m.add(newMenuItemSearchIngredientsBox);
+		m.add(newMenuItemDefaultRecipeList);
+		menuBar.add(m);
 
 		//add everything to this JPanel
-
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(searchedPanel, BorderLayout.SOUTH);
-		// add(newMenuUI, BorderLayout.NORTH);
-		add(newMenuUI, BorderLayout.NORTH);
-		add(contents, BorderLayout.CENTER);
+		add(menuBar , BorderLayout.PAGE_START);
+		add(contents , BorderLayout.CENTER);
 
 	}//end RecipePanel() no arg constructor
 
@@ -338,10 +330,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(list.size() == 1){
-				JOptionPane.showMessageDialog(null, "A recipe list must have at least one recipe.", "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+
 			index = listNames.getSelectedIndex();
 			list.get(index).setRecipeIcon(null);
 			list.remove(index);
