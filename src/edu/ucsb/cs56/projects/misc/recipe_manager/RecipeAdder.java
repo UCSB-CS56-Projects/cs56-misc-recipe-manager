@@ -17,9 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  *  RecipeAdder is a frame with text areas to enter
@@ -28,7 +30,9 @@ import javax.swing.JOptionPane;
 public class RecipeAdder extends JFrame {
 	Recipe newRecipe = new Recipe("");
 
-	JTextField nameField, descriptionField, directionsField;
+	JTextField nameField, descriptionField;
+	JTextArea directionsField;
+	JScrollPane directionsScrollPane;
 	ArrayList<JTextField> ingredientFields  = new ArrayList<>();
 
 	JButton button;
@@ -119,9 +123,10 @@ public class RecipeAdder extends JFrame {
 			fields = new JComponent[labelStrings.length];
 
 
-			for(int i=0; i<4; i++)
-				labels[i] = new JLabel(labelStrings[i],
-						JLabel.TRAILING);
+			for(int i=0; i<4; i++) {
+				labels[i] = new JLabel(labelStrings[i], JLabel.TRAILING);
+				// labels[i].setBorder(BorderFactory.createEmptyBorder(0,-20,0,0));
+			}
 
 			nameField = new JTextField(30);
 
@@ -130,8 +135,14 @@ public class RecipeAdder extends JFrame {
 			descriptionField = new JTextField(30);
 			fields[fieldNum++] = descriptionField;
 
-			directionsField = new JTextField(30);
-			fields[fieldNum++] = directionsField;
+			// directionsField = new JTextField(30);
+			directionsField = new JTextArea(15,25);
+			directionsField.setLineWrap(true);
+			directionsField.setBorder(new JTextField().getBorder());
+			// fields[fieldNum++] = directionsField;
+
+			directionsScrollPane = new JScrollPane(directionsField);
+			fields[fieldNum++] = directionsScrollPane;
 
 			fields[fieldNum++] = ingredientFields.get(0);
 
