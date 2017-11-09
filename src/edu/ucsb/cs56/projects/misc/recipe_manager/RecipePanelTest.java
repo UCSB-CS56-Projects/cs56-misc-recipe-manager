@@ -45,7 +45,7 @@ public class RecipePanelTest {
     }
 
     @Test
-    public void testAddNewRecipe(){
+    public void testAddRecipe(){
         clickOnFile();
         int size = ContentPane.getRecipeList().size();
 

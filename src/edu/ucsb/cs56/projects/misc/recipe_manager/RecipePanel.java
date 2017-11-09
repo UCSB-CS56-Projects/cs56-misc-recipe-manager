@@ -72,13 +72,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     //JPanels for components inside main JFrame
     JPanel searchedPanel;
     JPanel RecipesListed;   
-    JPanel newMenuUI;
+    JPanel newButtonsUI;
     JPanel recipeBox;
 	JPanel picture;
 
 	//Buttons for new men
-	JButton menu1;
-	JButton menu2; 
+	// JButton menu1;
+	// JButton menu2; 
 
     //Buffered Image/ImageIcon to accept and load images for recipes
     BufferedImage image;
@@ -89,7 +89,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	JFileChooser ic;
 
 	JMenu m;
-	JMenuBar menuBar;
+	// JMenuBar menuBar;
 	RecipeAdder adder;
 
     //Main panel that holds everything
@@ -165,51 +165,51 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
 
-		//makes a menu at top of frame
-		menuBar = new JMenuBar();
-		m = new JMenu("File");
+		//make a menu at top of frame
+		// menuBar = new JMenuBar();
+		// m = new JMenu("File");
 
-		//makes menu items
-		JButton newMenuItem = new JButton("Add New Recipe");
-		JButton newMenuItemDel = new JButton("Delete Selected Recipe");
-		JButton newMenuItemLoadList = new JButton("Load Recipe List");
-		JButton newMenuItemSaveList = new JButton("Save Recipe List");
-		JButton newMenuItemImageLoad = new JButton("Add Image to Selected Recipe");
-		JButton newMenuItemDeleteImage = new JButton("Delete Image from Selected Recipe");
-		JButton newMenuItemSearchBox = new JButton("Search for Recipe");
-		JButton newMenuItemSearchIngredientsBox = new JButton("Search for Ingredient");
-		JButton newMenuItemDefaultRecipeList = new JButton("Select Default Recipe List");
+		//make buttons
+		JButton newButtonItem = new JButton("Add New Recipe");
+		JButton newButtonItemDel = new JButton("Delete Selected Recipe");
+		JButton newButtonItemLoadList = new JButton("Load Recipe List");
+		JButton newButtonItemSaveList = new JButton("Save Recipe List");
+		JButton newButtonItemImageLoad = new JButton("Add Image to Selected Recipe");
+		JButton newButtonItemDeleteImage = new JButton("Delete Image from Selected Recipe");
+		JButton newButtonItemSearchBox = new JButton("Search for Recipe");
+		JButton newButtonItemSearchIngredientsBox = new JButton("Search for Ingredient");
+		JButton newButtonItemDefaultRecipeList = new JButton("Select Default Recipe List");
 
-		//add action listeners for menu items
-		newMenuItem.addActionListener(this);
-		newMenuItemDel.addActionListener(new deleteRecipe());
-		newMenuItemLoadList.addActionListener(new fileLoader());
-		newMenuItemSaveList.addActionListener(new fileSaver());
-		newMenuItemImageLoad.addActionListener(new ImageLoader());
-		newMenuItemDeleteImage.addActionListener(new DeleteImage());
-		newMenuItemSearchBox.addActionListener(new SearchBox());
-		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
-		newMenuItemDefaultRecipeList.addActionListener(new DefaultRecipeListSelector());
+		//add action listeners for Button items
+		newButtonItem.addActionListener(this);
+		newButtonItemDel.addActionListener(new deleteRecipe());
+		newButtonItemLoadList.addActionListener(new fileLoader());
+		newButtonItemSaveList.addActionListener(new fileSaver());
+		newButtonItemImageLoad.addActionListener(new ImageLoader());
+		newButtonItemDeleteImage.addActionListener(new DeleteImage());
+		newButtonItemSearchBox.addActionListener(new SearchBox());
+		newButtonItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
+		newButtonItemDefaultRecipeList.addActionListener(new DefaultRecipeListSelector());
 
 
-		//set up new Menu UI
-		newMenuUI = new JPanel(new GridLayout(3,3));
-		newMenuUI.add(newMenuItem);
-		newMenuUI.add(newMenuItemDel);
-		newMenuUI.add(newMenuItemLoadList);
-		newMenuUI.add(newMenuItemSaveList);
-		newMenuUI.add(newMenuItemImageLoad);
-		newMenuUI.add(newMenuItemDeleteImage);
-		newMenuUI.add(newMenuItemSearchBox);
-		newMenuUI.add(newMenuItemSearchIngredientsBox);
-		newMenuUI.add(newMenuItemDefaultRecipeList);
+		//set up new Button UI
+		newButtonsUI = new JPanel(new GridLayout(3,3));
+		newButtonsUI.add(newButtonItem);
+		newButtonsUI.add(newButtonItemDel);
+		newButtonsUI.add(newButtonItemLoadList);
+		newButtonsUI.add(newButtonItemSaveList);
+		newButtonsUI.add(newButtonItemImageLoad);
+		newButtonsUI.add(newButtonItemDeleteImage);
+		newButtonsUI.add(newButtonItemSearchBox);
+		newButtonsUI.add(newButtonItemSearchIngredientsBox);
+		newButtonsUI.add(newButtonItemDefaultRecipeList);
 
 		//add everything to this JPanel
 
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(searchedPanel, BorderLayout.SOUTH);
 		// add(newMenuUI, BorderLayout.NORTH);
-		add(newMenuUI, BorderLayout.NORTH);
+		add(newButtonsUI, BorderLayout.NORTH);
 		add(contents, BorderLayout.CENTER);
 
 	}//end RecipePanel() no arg constructor
