@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -31,6 +34,7 @@ public class RecipeAdder extends JFrame {
 	Recipe newRecipe = new Recipe("");
 
 	JTextField nameField, descriptionField;
+	// JTextArea directionsField;
 	JTextArea directionsField;
 	JScrollPane directionsScrollPane;
 	ArrayList<JTextField> ingredientFields  = new ArrayList<>();
@@ -139,6 +143,24 @@ public class RecipeAdder extends JFrame {
 			directionsField = new JTextArea(15,25);
 			directionsField.setLineWrap(true);
 			directionsField.setBorder(new JTextField().getBorder());
+			
+			// pressing TAB or SHIFT-TAB in directionsField will move
+			// the cursor to another component
+			directionsField.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_TAB) {
+						if (e.getModifiers() > 0) {
+							directionsField.transferFocusBackward();
+						}
+						else {
+							directionsField.transferFocus();
+						}
+						e.consume();
+					}
+				}
+			});
+
 			// fields[fieldNum++] = directionsField;
 
 			directionsScrollPane = new JScrollPane(directionsField);
@@ -204,12 +226,13 @@ public class RecipeAdder extends JFrame {
 			}
 			Recipe recipe = new Recipe(nameField.getText(), descriptionField.getText(), directionsField.getText()); 
 
-			for(int i=0; i<ingredientFields.size(); i++)
-				recipe.setIngredient(ingredientFields.get(i).getText());
+			for(int i=0; i<ingredientFields.size(); i++) {
+				if (!ingredientFields.get(i).getText().equals(""))
+						recipe.setIngredient(ingredientFields.get(i).getText());
+			}
 
 			list.add(recipe);		 
 			listModel.addElement(nameField.getText());
-
 			listNames.setModel(listModel);
 			listNames.setSelectedIndex(list.size()-1);
 
@@ -265,6 +288,10 @@ public class RecipeAdder extends JFrame {
 	 */
 	public Point getNameFieldLoc() {
 		return nameField.getLocationOnScreen();
+	}
+
+	public Point getIngredientsFieldLoc() {
+		return ingredientFields.get(0).getLocationOnScreen();
 	}
 
 }
