@@ -93,6 +93,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 	JMenu file;
 	JMenu edit;
 	JMenuBar menuBar;
+	RecipeEditer editer;
 	RecipeAdder adder;
 
     //Main panel that holds everything
@@ -197,12 +198,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		// make a JPanel to hold buttonsPanel and searchPanel
 		// JPanel buttonsSearchPanel = new JPanel();
-		// buttonsPanel.setLayout(new BoxLayout(buttonsSearchPanel, BoxLayout.PAGE_AXIS));
+		// buttonsPanel.setLayout(new BoxLayout(buttonsSearchPanel, BoxLayout.PAGE_AXIS)); //to set the layout of this, needed?
 
 		// make menu items
 		// JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load Recipe List");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save Recipe List");
+		JMenuItem newMenuItemEdit = new JMenuItem("Edit This Recipe");
 		JMenuItem newMenuItemImageLoad = new JMenuItem("Add Image to Selected Recipe");
 		JMenuItem newMenuItemDeleteImage = new JMenuItem("Delete Image from Selected Recipe");
 		JMenuItem newMenuItemSearchBox = new JMenuItem("Search for Recipe");
@@ -228,6 +230,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newButtonItem.addActionListener(this);
 		// newMenuItemDel.addActionListener(new deleteRecipe());
 		newButtonItemDel.addActionListener(new deleteRecipe());
+		newMenuItemEdit.addActionListener(new editRecipe());
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
 		newMenuItemImageLoad.addActionListener(new ImageLoader());
@@ -254,23 +257,11 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		file.add(newMenuItemSearchBox);
 		file.add(newMenuItemSearchIngredientsBox);
 		file.add(newMenuItemDefaultRecipeList);
-		// edit.add(newMenuItemDel);
 		edit.add(newMenuItemImageLoad);
 		edit.add(newMenuItemDeleteImage);
+		edit.add(newMenuItemEdit);
 		menuBar.add(file);
 		menuBar.add(edit);
-
-		//set up new Button UI
-		// newButtonsUI = new JPanel(new GridLayout(3,3));
-		// newButtonsUI.add(newButtonItem);
-		// newButtonsUI.add(newButtonItemDel);
-		// newButtonsUI.add(newButtonItemLoadList);
-		// newButtonsUI.add(newButtonItemSaveList);
-		// newButtonsUI.add(newButtonItemImageLoad);
-		// newButtonsUI.add(newButtonItemDeleteImage);
-		// newButtonsUI.add(newButtonItemSearchBox);
-		// newButtonsUI.add(newButtonItemSearchIngredientsBox);
-		// newButtonsUI.add(newButtonItemDefaultRecipeList);
 
 		//add everything to this JPanel
 
@@ -423,6 +414,19 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			listNames.setSelectedIndex(0);
 		}
 
+    }
+
+    public class editRecipe implements ActionListener{
+    	/**
+		 * Listens for the "edit this recipe" button to be clicked and
+		 * then performs the corresponding action
+		 * @param arg0 ActionEvent of the "edit selected recipe"
+		 */
+    	@Override
+    	public void actionPerformed(ActionEvent e){
+    		Recipe selectedRecipe = list.get(listNames.getSelectedIndex());
+    		editer = new RecipeEditer(list, listModel, listNames, selectedRecipe);
+    	}
     }
 /*
 returnVal == JFileChooser.APPROVE_OPTION) {

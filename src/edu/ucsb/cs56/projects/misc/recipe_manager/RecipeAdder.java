@@ -76,7 +76,7 @@ public class RecipeAdder extends JFrame {
 		Border titled2 = new TitledBorder("Enter Information:");
 		content.setBorder(titled2);
 
-		ActionListener saveListener = new bottonListener();
+		ActionListener saveListener = new buttonListener();
 		ActionListener moreIngredientsListener = new moreIngredientsListener();
 
 		button = new JButton("Add to list");
@@ -201,8 +201,7 @@ public class RecipeAdder extends JFrame {
 	 * Second inner class that listens for
 	 * the user to push the "add recipe" button
 	 */
-
-	public class bottonListener implements ActionListener {
+	public class buttonListener implements ActionListener {
 
 		/**
 		 * Listens for the "add recipe" button to be clicked and
