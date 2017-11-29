@@ -9,6 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
@@ -264,7 +267,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		menuBar.add(edit);
 
 		//add everything to this JPanel
-
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(searchedPanel, BorderLayout.SOUTH);
 		add(menuBar, BorderLayout.NORTH);
@@ -382,6 +384,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 			ex.printStackTrace();
 		}
 	}
+
 
 	/**
 	 * Inner class that deletes a recipe when the
