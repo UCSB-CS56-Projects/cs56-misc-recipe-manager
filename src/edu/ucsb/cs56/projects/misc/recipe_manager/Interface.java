@@ -39,32 +39,29 @@ public class Interface extends JFrame implements KeyListener{
          setSize(1200,900); //width 1200, height 900
 	     setVisible(true) ;
 
-	        try {
+	        
+	}
+
+	   	public void keyPressed(KeyEvent e) {
+	   		try {
 	            robot = new Robot();
 	        } catch (Exception ex) {
 	            ex.printStackTrace();
 	        }
-	}
-
-	   	public void keyPressed(KeyEvent e) {
 	   		
 	      int key = e.getKeyCode();
 	        if(key == KeyEvent.VK_DELETE || key == KeyEvent.VK_BACK_SPACE){
-	            robot.delay(100);
-    			int mask = InputEvent.BUTTON1_DOWN_MASK;
-		        int x = (int)ContentPane.getDeleteRecipeButtonLocation().getX();
-		        int y = (int)ContentPane.getDeleteRecipeButtonLocation().getY();
-		        robot.mouseMove(x,y);
-		        robot.mousePress(mask);
-		        robot.mouseRelease(mask);
+
+	        	ContentPane.index = ContentPane.listNames.getSelectedIndex();
+				ContentPane.list.get(ContentPane.index).setRecipeIcon(null);
+				ContentPane.recipeInfo.setIcon(null);
+				ContentPane.list.remove(ContentPane.index);
+				ContentPane.listModel.remove(ContentPane.index);
+
+				ContentPane.listNames.setModel(ContentPane.listModel);
+				ContentPane.listNames.setSelectedIndex(0);
 	        }else if (key == KeyEvent.VK_N){
-	        	robot.delay(100);
-    			int mask = InputEvent.BUTTON1_DOWN_MASK;
-		        int x = (int)ContentPane.getAddNewRecipeButtonLocation().getX();
-		        int y = (int)ContentPane.getAddNewRecipeButtonLocation().getY();
-		        robot.mouseMove(x,y);
-		        robot.mousePress(mask);
-		        robot.mouseRelease(mask);
+	        	ContentPane.adder = new RecipeAdder(ContentPane.list, ContentPane.listModel, ContentPane.listNames);
 	        }
 	      
 	   	}
