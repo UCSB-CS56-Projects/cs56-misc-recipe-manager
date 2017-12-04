@@ -15,7 +15,8 @@ public class RecipeList extends ArrayList<Recipe> implements Serializable {
 	 */
 
 	RecipeList(){
-		super(2); 
+		// super(2); 
+		super();
 	}
 
 	/**
@@ -25,9 +26,9 @@ public class RecipeList extends ArrayList<Recipe> implements Serializable {
 	 */
 
 	RecipeList(Recipe r){
-		super(2);
-		add(r);
-		
+		// super(2);
+		super();
+		add(r);		
 	}
 
 	/** TODO: Document and implement this method.. or not.  If not remove this. */

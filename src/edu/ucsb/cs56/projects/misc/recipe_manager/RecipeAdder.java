@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -17,8 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  *  RecipeAdder is a frame with text areas to enter
@@ -27,7 +33,10 @@ import javax.swing.border.TitledBorder;
 public class RecipeAdder extends JFrame {
 	Recipe newRecipe = new Recipe("");
 
-	JTextField nameField, descriptionField, directionsField;
+	JTextField nameField, descriptionField;
+	// JTextArea directionsField;
+	JTextArea directionsField;
+	JScrollPane directionsScrollPane;
 	ArrayList<JTextField> ingredientFields  = new ArrayList<>();
 
 	JButton button;
@@ -118,9 +127,10 @@ public class RecipeAdder extends JFrame {
 			fields = new JComponent[labelStrings.length];
 
 
-			for(int i=0; i<4; i++)
-				labels[i] = new JLabel(labelStrings[i],
-						JLabel.TRAILING);
+			for(int i=0; i<4; i++) {
+				labels[i] = new JLabel(labelStrings[i], JLabel.TRAILING);
+				// labels[i].setBorder(BorderFactory.createEmptyBorder(0,-20,0,0));
+			}
 
 			nameField = new JTextField(30);
 
@@ -129,8 +139,32 @@ public class RecipeAdder extends JFrame {
 			descriptionField = new JTextField(30);
 			fields[fieldNum++] = descriptionField;
 
-			directionsField = new JTextField(30);
-			fields[fieldNum++] = directionsField;
+			// directionsField = new JTextField(30);
+			directionsField = new JTextArea(15,25);
+			directionsField.setLineWrap(true);
+			directionsField.setBorder(new JTextField().getBorder());
+			
+			// pressing TAB or SHIFT-TAB in directionsField will move
+			// the cursor to another component
+			directionsField.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_TAB) {
+						if (e.getModifiers() > 0) {
+							directionsField.transferFocusBackward();
+						}
+						else {
+							directionsField.transferFocus();
+						}
+						e.consume();
+					}
+				}
+			});
+
+			// fields[fieldNum++] = directionsField;
+
+			directionsScrollPane = new JScrollPane(directionsField);
+			fields[fieldNum++] = directionsScrollPane;
 
 			fields[fieldNum++] = ingredientFields.get(0);
 
@@ -178,14 +212,27 @@ public class RecipeAdder extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			boolean hasIngredients = false;
+			for(JTextField f : ingredientFields){
+				if(!f.getText().equals("")){
+					hasIngredients = true;
+					break;
+				}
+			}
+			if (nameField.getText().equals("") || descriptionField.getText().equals("") || directionsField.getText().equals("") || !hasIngredients) {
+				JOptionPane.showMessageDialog(null, "Please fill out all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+				dispose();
+				return;
+			}
 			Recipe recipe = new Recipe(nameField.getText(), descriptionField.getText(), directionsField.getText()); 
 
-			for(int i=0; i<ingredientFields.size(); i++)
-				recipe.setIngredient(ingredientFields.get(i).getText());
+			for(int i=0; i<ingredientFields.size(); i++) {
+				if (!ingredientFields.get(i).getText().equals(""))
+						recipe.setIngredient(ingredientFields.get(i).getText());
+			}
 
 			list.add(recipe);		 
 			listModel.addElement(nameField.getText());
-
 			listNames.setModel(listModel);
 			listNames.setSelectedIndex(list.size()-1);
 
@@ -241,6 +288,10 @@ public class RecipeAdder extends JFrame {
 	 */
 	public Point getNameFieldLoc() {
 		return nameField.getLocationOnScreen();
+	}
+
+	public Point getIngredientsFieldLoc() {
+		return ingredientFields.get(0).getLocationOnScreen();
 	}
 
 }

@@ -72,8 +72,13 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     //JPanels for components inside main JFrame
     JPanel searchedPanel;
     JPanel RecipesListed;   
-    JPanel recipeBox;
+    // JPanel newButtonsUI;
+    // JPanel recipeBox;
 	JPanel picture;
+
+	//Buttons for new men
+	// JButton menu1;
+	// JButton menu2; 
 
     //Buffered Image/ImageIcon to accept and load images for recipes
     BufferedImage image;
@@ -83,7 +88,10 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
     JFileChooser fc;
 	JFileChooser ic;
 
-	JMenu m;
+	// JMenu m;
+	// JMenuBar menuBar;
+	JMenu file;
+	JMenu edit;
 	JMenuBar menuBar;
 	RecipeAdder adder;
 
@@ -121,7 +129,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		Border titled = new TitledBorder("Info:");
 		RecipeInfoScroller .setBorder(titled);
 		RecipeInfoScroller .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		RecipeInfoScroller .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);		
 		RecipeInfoScroller .setBackground(Color.WHITE);
 
 		//set up a list of recipes
@@ -160,13 +168,39 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		contents.add(RecipeInfoScroller  , BorderLayout.CENTER);
 		contents.setBackground(Color.WHITE);
 
-		//makes a menu at top of frame
+		//make a menu at top of frame
+		// menuBar = new JMenuBar();
+		// m = new JMenu("File");
 		menuBar = new JMenuBar();
-		m = new JMenu("File");
+		file = new JMenu("File");
+		edit = new JMenu("Edit");
 
-		//makes menu items
-		JMenuItem newMenuItem = new JMenuItem("Add New Recipe");
-		JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
+		//make buttons
+		JButton newButtonItem = new JButton("Add New Recipe");
+		JButton newButtonItemDel = new JButton("Delete Selected Recipe");
+		// JButton newButtonSearch = new JButton("Search");
+
+		// JButton newButtonItemDel = new JButton("Delete Selected Recipe");
+		// JButton newButtonItemLoadList = new JButton("Load Recipe List");
+		// JButton newButtonItemSaveList = new JButton("Save Recipe List");
+		// JButton newButtonItemImageLoad = new JButton("Add Image to Selected Recipe");
+		// JButton newButtonItemDeleteImage = new JButton("Delete Image from Selected Recipe");
+		// JButton newButtonItemSearchBox = new JButton("Search for Recipe");
+		// JButton newButtonItemSearchIngredientsBox = new JButton("Search for Ingredient");
+		// JButton newButtonItemDefaultRecipeList = new JButton("Select Default Recipe List");
+
+		// make a JPanel to hold the buttons
+		JPanel buttonsPanel = new JPanel();
+
+		// make a JPanel to hold the search box
+		// JPanel searchPanel = new JPanel();
+
+		// make a JPanel to hold buttonsPanel and searchPanel
+		// JPanel buttonsSearchPanel = new JPanel();
+		// buttonsPanel.setLayout(new BoxLayout(buttonsSearchPanel, BoxLayout.PAGE_AXIS));
+
+		// make menu items
+		// JMenuItem newMenuItemDel = new JMenuItem("Delete Selected Recipe");
 		JMenuItem newMenuItemLoadList = new JMenuItem("Load Recipe List");
 		JMenuItem newMenuItemSaveList = new JMenuItem("Save Recipe List");
 		JMenuItem newMenuItemImageLoad = new JMenuItem("Add Image to Selected Recipe");
@@ -175,9 +209,25 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		JMenuItem newMenuItemSearchIngredientsBox = new JMenuItem("Search for Ingredient");
 		JMenuItem newMenuItemDefaultRecipeList = new JMenuItem("Select Default Recipe List");
 
-		//add action listeners for menu items
-		newMenuItem.addActionListener(this);
-		newMenuItemDel.addActionListener(new deleteRecipe());
+		// // make search box
+		// JTextField newTextFieldSearch = new JTextField("Search:");
+		// JText
+
+		//add action listeners for Button items
+		// newButtonItem.addActionListener(this);
+		// newButtonItemDel.addActionListener(new deleteRecipe());
+		// newButtonItemLoadList.addActionListener(new fileLoader());
+		// newButtonItemSaveList.addActionListener(new fileSaver());
+		// newButtonItemImageLoad.addActionListener(new ImageLoader());
+		// newButtonItemDeleteImage.addActionListener(new DeleteImage());
+		// newButtonItemSearchBox.addActionListener(new SearchBox());
+		// newButtonItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
+		// newButtonItemDefaultRecipeList.addActionListener(new DefaultRecipeListSelector());
+
+		// add action listeners for buttons and menu items
+		newButtonItem.addActionListener(this);
+		// newMenuItemDel.addActionListener(new deleteRecipe());
+		newButtonItemDel.addActionListener(new deleteRecipe());
 		newMenuItemLoadList.addActionListener(new fileLoader());
 		newMenuItemSaveList.addActionListener(new fileSaver());
 		newMenuItemImageLoad.addActionListener(new ImageLoader());
@@ -186,23 +236,49 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		newMenuItemSearchIngredientsBox.addActionListener(new SearchIngredientsBox());
 		newMenuItemDefaultRecipeList.addActionListener(new DefaultRecipeListSelector());
 
-		//add menu items to menu and add menu to menubar
-		m.add(newMenuItem);
-		m.add(newMenuItemDel);
-		m.add(newMenuItemLoadList);
-		m.add(newMenuItemSaveList);
-		m.add(newMenuItemImageLoad);
-		m.add(newMenuItemDeleteImage);
-		m.add(newMenuItemSearchBox);
-		m.add(newMenuItemSearchIngredientsBox);
-		m.add(newMenuItemDefaultRecipeList);
-		menuBar.add(m);
+		// add "Add Recipe" and "Delete Selected Recipe" buttons and
+		// newTextFieldSearch and ______ to buttonsPanel
+		// and add buttonsPanel to RecipesListed
+		// searchPanel.add(newTextFieldSearch);
+		buttonsPanel.add(newButtonItem);
+		buttonsPanel.add(newButtonItemDel);
+		// buttonsSearchPanel.add(searchPanel);
+		// buttonsSearchPanel.add(buttonsPanel);
+		// RecipesListed.add(buttonsSearchPanel, BorderLayout.SOUTH);
+		// RecipesListed.add(newButtonItemDel, BorderLayout.SOUTH);
+		RecipesListed.add(buttonsPanel, BorderLayout.SOUTH);
+
+		// add menu items to file or edit and add menu to menubar
+		file.add(newMenuItemSaveList);
+		file.add(newMenuItemLoadList);
+		file.add(newMenuItemSearchBox);
+		file.add(newMenuItemSearchIngredientsBox);
+		file.add(newMenuItemDefaultRecipeList);
+		// edit.add(newMenuItemDel);
+		edit.add(newMenuItemImageLoad);
+		edit.add(newMenuItemDeleteImage);
+		menuBar.add(file);
+		menuBar.add(edit);
+
+		//set up new Button UI
+		// newButtonsUI = new JPanel(new GridLayout(3,3));
+		// newButtonsUI.add(newButtonItem);
+		// newButtonsUI.add(newButtonItemDel);
+		// newButtonsUI.add(newButtonItemLoadList);
+		// newButtonsUI.add(newButtonItemSaveList);
+		// newButtonsUI.add(newButtonItemImageLoad);
+		// newButtonsUI.add(newButtonItemDeleteImage);
+		// newButtonsUI.add(newButtonItemSearchBox);
+		// newButtonsUI.add(newButtonItemSearchIngredientsBox);
+		// newButtonsUI.add(newButtonItemDefaultRecipeList);
 
 		//add everything to this JPanel
+
 		add(RecipesListed, BorderLayout.LINE_START);
 		add(searchedPanel, BorderLayout.SOUTH);
-		add(menuBar , BorderLayout.PAGE_START);
-		add(contents , BorderLayout.CENTER);
+		add(menuBar, BorderLayout.NORTH);
+		// add(newButtonsUI, BorderLayout.NORTH);
+		add(contents, BorderLayout.CENTER);
 
 	}//end RecipePanel() no arg constructor
 
@@ -259,7 +335,7 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 	public String printInfo(){
 		if(index > (list.size() - 1) || index < 0)
-			return "error";
+			return "No recipes";
 		return list.get(index).printRecipe();
 	}
 
@@ -316,7 +392,6 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 		}
 	}
 
-
 	/**
 	 * Inner class that deletes a recipe when the
 	 * user clicks on the appropriate button
@@ -331,9 +406,16 @@ public class RecipePanel extends JPanel implements ActionListener, ListSelection
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
+			// if(list.size() == 1){
+			// 	JOptionPane.showMessageDialog(null, "A recipe list must have at least one recipe.", "Error", JOptionPane.ERROR_MESSAGE);
+			// 	return;
+			// }
 			index = listNames.getSelectedIndex();
+			// list.get(index).setRecipeIcon(null);
 			list.get(index).setRecipeIcon(null);
+			recipeInfo.setIcon(null);
+			// recipeInfo.repaint();
+			// recipeInfo.revalidate();
 			list.remove(index);
 			listModel.remove(index);
 
@@ -416,6 +498,7 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 					{
 						for(String s2: recipeTokens)
 						{
+							System.out.println(s2);
 							if(s.matches(s2)) //add to list if match for input
 							{
 								searchedList.add(list.get(i));
@@ -433,6 +516,7 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 			finally{
 			DefaultListModel searchedListStrings = new DefaultListModel();
 			searchedList2 = searchedList;
+
 			if(searchedList.isEmpty())
 					{
 					JOptionPane.showMessageDialog(null, "Recipe does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -517,15 +601,17 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 
 
 			try{
-			String delims2 = "[,-.! ]+"; //get rid of these symbols in recipe
-			for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
-				{
+			//String delims2 = "[,-.!/() ]+"; //get rid of these symbols in recipe
+			String delims2 = "\\P{Alpha}+";
+			/*for(int i = 0; i<list.size(); i++) //loops through individual recipes and searches through them to match user's input
+			{
 				String[] ingredientTokens = list.get(i).getDirections().toLowerCase().split(delims2); // array of strings that make up the recipe
 
 				for(String s: lowerUserInputTokens) //compares each string to each ingredient token
 					{
 						for(String s2: ingredientTokens)
 						{
+							System.out.println(s2);
 							if(s.matches(s2)) //if input matches ingredient, add list
 							{
 								searchedList.add(list.get(i));
@@ -534,7 +620,25 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 					}
 				}
 
+			}*/
+			
+				for (int i = 0; i < list.size(); i++) {
+					for (int j = 0; j < list.get(i).getList().size(); j++) {
+						String[] ingredientTokens = list.get(i).getList().get(j).toLowerCase().split(delims2);
+						for (String s : ingredientTokens) {
+							System.out.println(s);
+						}
+						for (String s : lowerUserInputTokens) {
+							for (String s2 : ingredientTokens) {
+								if (s.matches(s2)){
+									searchedList.add(list.get(i));
+								}
+							}
+						}
+					}
+				}
 			}
+
 			catch(Exception ex){
 			ex.printStackTrace();
 
@@ -743,41 +847,102 @@ returnVal == JFileChooser.APPROVE_OPTION) {
 		}
 	}//end of fileSaver
 
-	public Point getFileButtonLoc(){
-		return m.getLocationOnScreen();
+	public Point getFileMenuLocation() {
+		return file.getLocationOnScreen();
 	}
 
-	public Point getAddRecipeLocation(){
-		return m.getMenuComponent(0).getLocationOnScreen();
+	public Point getEditMenuLocation() {
+		return edit.getLocationOnScreen();
 	}
 
-	public Point getDeleteRecipeLocation(){
-		return m.getMenuComponent(1).getLocationOnScreen();
+	public Point getAddNewRecipeButtonLocation() {
+		return ((JPanel)RecipesListed.getComponent(1)).getComponent(0).getLocationOnScreen();
 	}
 
-	public Point getLoadRecipeLocation(){
-		return m.getMenuComponent(2).getLocationOnScreen();
+	public Point getDeleteRecipeButtonLocation() {
+		return((JPanel)RecipesListed.getComponent(1)).getComponent(1).getLocationOnScreen();
 	}
 
-	public Point getSaveRecipeLocation(){
-		return m.getMenuComponent(3).getLocationOnScreen();
+	public Point getSaveRecipeListMenuItemLocation() {
+		return file.getMenuComponent(0).getLocationOnScreen();
 	}
 
-	public Point getAddImageLocation(){
-		return m.getMenuComponent(4).getLocationOnScreen();
+	public Point getLoadRecipeListMenuItemLocation() {
+		return file.getMenuComponent(1).getLocationOnScreen();
 	}
 
-	public Point getDeleteImageLocation(){
-		return m.getMenuComponent(5).getLocationOnScreen();
+	public Point getSearchForRecipeMenuItemLocation() {
+		return file.getMenuComponent(2).getLocationOnScreen();
 	}
 
-	public Point getSearchRecipeLocation(){
-		return m.getMenuComponent(6).getLocationOnScreen();
+	public Point getSearchForIngredientMenuItemLocation() {
+		return file.getMenuComponent(3).getLocationOnScreen();
 	}
 
-	public Point getSearchIngredientLocation(){
-		return m.getMenuComponent(7).getLocationOnScreen();
-	}
+	// public Point getAddRecipeLocation(){
+	// 	return m.getMenuComponent(0).getLocationOnScreen();
+	// }
+
+	// public Point getButtonLoc(String name) {
+	// 	switch(name) {
+ //            case "Add New Recipe":
+ //                index = 0;
+ //                break;
+ //            case "Delete Selected Recipe":
+ //                index = 1;
+ //                break;
+ //            case "Load Recipe List":
+ //                index = 2;
+ //                break;
+ //            case "Save Recipe List":
+ //                index = 3;
+ //                break;
+ //            case "Add Image to Selected Recipe":
+ //                index = 4;
+ //                break;
+ //            case "Delete Image from Selected Recipe":
+ //                index = 5;
+ //                break;
+ //            case "Search for Recipe":
+ //                index = 6;
+ //                break;
+ //            case "Search for Ingredient":
+ //                index = 7;
+ //                break;
+ //            case "Select Default Recipe List":
+ //                index = 8;
+ //                break;
+ //        }
+ //        return newButtonsUI.getComponent(index).getLocationOnScreen();
+	// }
+
+	// public Point getDeleteRecipeLocation(){
+	// 	return m.getMenuComponent(1).getLocationOnScreen();
+	// }
+
+	// public Point getLoadRecipeLocation(){
+	// 	return m.getMenuComponent(2).getLocationOnScreen();
+	// }
+
+	// public Point getSaveRecipeLocation(){
+	// 	return m.getMenuComponent(3).getLocationOnScreen();
+	// }
+
+	// public Point getAddImageLocation(){
+	// 	return m.getMenuComponent(4).getLocationOnScreen();
+	// }
+
+	// public Point getDeleteImageLocation(){
+	// 	return m.getMenuComponent(5).getLocationOnScreen();
+	// }
+
+	// public Point getSearchRecipeLocation(){
+	// 	return m.getMenuComponent(6).getLocationOnScreen();
+	// }
+
+	// public Point getSearchIngredientLocation(){
+	// 	return m.getMenuComponent(7).getLocationOnScreen();
+	// }
 
 	public JFrame getAdderWindow(){
 		return adder;

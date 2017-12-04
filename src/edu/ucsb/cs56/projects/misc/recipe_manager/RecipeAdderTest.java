@@ -30,6 +30,8 @@ public class RecipeAdderTest {
     int addToListButtonY;
     int nameFieldX;
     int nameFieldY;
+    int ingredientsFieldX;
+    int ingredientsFieldY;
 
 
     @Before
@@ -123,14 +125,24 @@ public class RecipeAdderTest {
     @Test
     public void testAddingRecipeNameOnly() {
         //Get current widget locations, type "apples" into name field
+        int size = list.size();
         refreshWidgetLocations();
         clickInsideNameField();
         robotType("apples");
 
         clickAddToList();
         robot.delay(50);
+
+        robot.keyPress(KeyEvent.VK_SPACE);
+        robot.keyRelease(KeyEvent.VK_SPACE);
+        robot.delay(100);
+
         //Confirm "apples" is the first element in the list
-        assertEquals(list.get(0).toString(), "apples");
+        // assertEquals(list.get(0).toString(), "apples");
+        assertEquals(size, list.size());
+
+        // assertEquals(ContentPane.getJOptionPane().isVisible(), true);
+        // clickCancelFromPopup();
     }
 
 
@@ -138,6 +150,8 @@ public class RecipeAdderTest {
     public void testAddingRecipeNameAndDescription() {
         refreshWidgetLocations();
         clickInsideNameField();
+
+        int size = list.size();
 
         //Type "apples"
         robotType("apples");
@@ -150,10 +164,16 @@ public class RecipeAdderTest {
 
         //Confirm "apples" is the first element in the list
         robot.delay(50);
-        assertEquals(list.get(0).toString(), "apples");
+        // assertEquals(list.get(0).toString(), "apples");
+        robot.keyPress(KeyEvent.VK_SPACE);
+        robot.keyRelease(KeyEvent.VK_SPACE);
+        robot.delay(100);
 
         //Confirm the description of this element is "yum"
-        assertEquals(list.get(0).getDescription(), "yum");
+        // assertEquals(list.get(0).getDescription(), "yum");
+        assertEquals(size, list.size());
+        // assertEquals(ContentPane.getJOptionPane().isVisible(), true);
+        // clickCancelFromPopup();
     }
 
 
@@ -161,6 +181,8 @@ public class RecipeAdderTest {
     public void testAddingRecipeNameDescriptionAndDirections() {
         refreshWidgetLocations();
         clickInsideNameField();
+
+        int size = list.size();
 
         //Type "apples"
         robotType("apples");
@@ -176,13 +198,21 @@ public class RecipeAdderTest {
         clickAddToList();
 
         //Confirm "apples" is the first element in the list
-        assertEquals(list.get(0).toString(), "apples");
+        // assertEquals(list.get(0).toString(), "apples");
 
-        //Confirm the description of this recipe is "yum"
-        assertEquals(list.get(0).getDescription(), "yum");
+        // Confirm the description of this recipe is "yum"
+        // assertEquals(list.get(0).getDescription(), "yum");
 
         //Confirm the directions of this recipe is "eat"
-        assertEquals(list.get(0).getDirections(), "eat");
+        // assertEquals(list.get(0).getDirections(), "eat");
+        robot.keyPress(KeyEvent.VK_SPACE);
+        robot.keyRelease(KeyEvent.VK_SPACE);
+        robot.delay(100);
+        assertEquals(size, list.size());
+
+        // assertEquals(ContentPane.getJOptionPane().isVisible(), true);
+        // clickCancelFromPopup();
+
     }
 
     @Test
@@ -203,11 +233,14 @@ public class RecipeAdderTest {
 
         //Move to "ingredients", add "apples" and "cinnamon"
         robotTab();
+        // clickInsideIngredientsField();
         robotType("apples");
         robotTab();
         robotType("cinnamon");
 
         clickAddToList();
+
+        robot.delay(100);
 
         //Confirm "apples" is the first element in the list
         assertEquals(list.get(0).toString(), "CinnamonApples");
@@ -267,6 +300,13 @@ public class RecipeAdderTest {
         robot.delay(50);
     }
 
+    // private void clickInsideIngredientsField() {
+    //     robot.mouseMove(ingredientsFieldX, ingredientsFieldY);
+    //     robot.mousePress(mask);
+    //     robot.mouseRelease(mask);
+    //     robot.delay(50);
+    // }
+
     private void refreshWidgetLocations() {
         moreIngredientsButtonX = adder.getMoreIngredientsButtonLoc().x + 5;
         moreIngredientsButtonY = adder.getMoreIngredientsButtonLoc().y + 5;
@@ -274,5 +314,7 @@ public class RecipeAdderTest {
         addToListButtonY = adder.getAddToListButtonLoc().y + 5;
         nameFieldX = adder.getNameFieldLoc().x + 5;
         nameFieldY = adder.getNameFieldLoc().y + 5;
+        ingredientsFieldX = adder.getIngredientsFieldLoc().x + 5;
+        ingredientsFieldY = adder.getIngredientsFieldLoc().y + 5;
     }
 }

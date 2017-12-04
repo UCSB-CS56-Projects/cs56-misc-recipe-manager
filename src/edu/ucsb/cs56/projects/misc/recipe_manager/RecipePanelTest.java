@@ -45,16 +45,18 @@ public class RecipePanelTest {
     }
 
     @Test
-    public void testAddNewRecipe(){
-        clickOnFile();
+    public void testAddBlankRecipe(){
+        // clickOnFile();
+        // clickOnAddNewRecipe();
         int size = ContentPane.getRecipeList().size();
 
-        int addX = (int)ContentPane.getAddRecipeLocation().getX();
-        int addY = (int)ContentPane.getAddRecipeLocation().getY();
-        robot.mouseMove(addX, addY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // int addX = (int)ContentPane.getAddRecipeLocation().getX();
+        // int addY = (int)ContentPane.getAddRecipeLocation().getY();
+        // robot.mouseMove(addX, addY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        clickOnAddNewRecipeButton();
         robot.delay(100);
         for(int x = 0; x < 9; x++){
             robotTab();
@@ -62,28 +64,40 @@ public class RecipePanelTest {
         if(mac){
             robotTab();
         }
-	if (mac) robotTab();
+	    if (mac) robotTab();
         robot.delay(100);
         robot.keyPress(KeyEvent.VK_SPACE);
         robot.keyRelease(KeyEvent.VK_SPACE);
         robot.delay(100);
 
-        assertEquals(ContentPane.getRecipeList().size(), size+1);
+        // assertEquals(ContentPane.getRecipeList().size(), size+1);
+
+
+        // assertEquals(ContentPane.getJOptionPane().isVisible(), true);
+        robot.keyPress(KeyEvent.VK_SPACE);
+        robot.keyRelease(KeyEvent.VK_SPACE);
+        // assertEquals(size+1, ContentPane.getRecipeList().size());
+        assertEquals(size, ContentPane.getRecipeList().size());
+
+        // clickCancelFromPopup();
+        // assertEquals(ContentPane.getRecipeList().size(), size);
 
     }
 
     @Test
     public void testDeleteRecipe(){
 
-        clickOnFile();
+        // clickOnFile();
         int size = ContentPane.getRecipeList().size();
-        int deleteX = (int)ContentPane.getDeleteRecipeLocation().getX();
-        int deleteY = (int)ContentPane.getDeleteRecipeLocation().getY();
+        // int deleteX = (int)ContentPane.getDeleteRecipeLocation().getX();
+        // int deleteY = (int)ContentPane.getDeleteRecipeLocation().getY();
         robot.delay(100);
         assertEquals(size, ContentPane.getRecipeList().size());
-        robot.mouseMove(deleteX, deleteY);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // robot.mouseMove(deleteX, deleteY);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Delete Selected Recipe");
+        clickOnDeleteRecipeButton();
         robot.delay(500);
 
         assertEquals(size-1, ContentPane.getRecipeList().size());
@@ -93,13 +107,15 @@ public class RecipePanelTest {
 
     @Test
     public void testLoadRecipe(){
-        clickOnFile();
-        int loadX = (int)ContentPane.getLoadRecipeLocation().getX();
-        int loadY = (int)ContentPane.getLoadRecipeLocation().getY();
-        robot.mouseMove(loadX, loadY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // clickOnFile();
+        // int loadX = (int)ContentPane.getLoadRecipeLocation().getX();
+        // int loadY = (int)ContentPane.getLoadRecipeLocation().getY();
+        // robot.mouseMove(loadX, loadY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Load Recipe List");
+        clickOnLoadRecipeMenuItem();
         robot.delay(500);
         assertEquals(ContentPane.getFC().isShowing(), true);
         robot.delay(100);
@@ -111,13 +127,15 @@ public class RecipePanelTest {
 
     @Test
     public void testSaveRecipe(){
-        clickOnFile();
-        int saveX = (int)ContentPane.getSaveRecipeLocation().getX();
-        int saveY = (int)ContentPane.getSaveRecipeLocation().getY();
-        robot.mouseMove(saveX, saveY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // clickOnFile();
+        // int saveX = (int)ContentPane.getSaveRecipeLocation().getX();
+        // int saveY = (int)ContentPane.getSaveRecipeLocation().getY();
+        // robot.mouseMove(saveX, saveY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Save Recipe List");
+        clickOnSaveRecipeListMenuItem();
         robot.delay(1000);
         assertEquals(ContentPane.getFC().isShowing(), true);
         robot.delay(100);
@@ -198,13 +216,15 @@ public class RecipePanelTest {
 
     @Test
     public void testSearchIngredient(){
-        clickOnFile();
-        int addX = (int)ContentPane.getSearchIngredientLocation().getX();
-        int addY = (int)ContentPane.getSearchIngredientLocation().getY();
-        robot.mouseMove(addX, addY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // clickOnFile();
+        // int addX = (int)ContentPane.getSearchIngredientLocation().getX();
+        // int addY = (int)ContentPane.getSearchIngredientLocation().getY();
+        // robot.mouseMove(addX, addY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Search for Ingredient");
+        clickOnSearchForIngredientMenuItem();
         robot.delay(100);
         //System.out.println(JOptionPane.CANCEL_OPTION);
         assertEquals(ContentPane.getJOptionPane().isVisible(), true);
@@ -214,12 +234,14 @@ public class RecipePanelTest {
 
     @Test
     public void testSearchRecipeLocation(){
-        clickOnFile();
-        int addX = (int)ContentPane.getSearchRecipeLocation().getX();
-        int addY = (int)ContentPane.getSearchRecipeLocation().getY();
-        robot.mouseMove(addX, addY);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // clickOnFile();
+        // int addX = (int)ContentPane.getSearchRecipeLocation().getX();
+        // int addY = (int)ContentPane.getSearchRecipeLocation().getY();
+        // robot.mouseMove(addX, addY);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Search for Recipe");
+        clickOnSearchForRecipeMenuItem();
         robot.delay(100);
         assertEquals(ContentPane.getJOptionIngredientPane().isVisible(), true);
         clickCancelFromPopup();
@@ -228,15 +250,18 @@ public class RecipePanelTest {
 
     @Test
     public void testAddNewRecipeCinnamonApples(){
-        clickOnFile();
+        // clickOnFile();
+        // clickOnAddNewRecipe();
         int size = ContentPane.getRecipeList().size();
-        int addX = (int)ContentPane.getAddRecipeLocation().getX();
-        int addY = (int)ContentPane.getAddRecipeLocation().getY();
+        // int addX = (int)ContentPane.getAddRecipeLocation().getX();
+        // int addY = (int)ContentPane.getAddRecipeLocation().getY();
         assertEquals(size, ContentPane.getRecipeList().size());
-        robot.mouseMove(addX, addY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // robot.mouseMove(addX, addY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Add New Recipe");
+        clickOnAddNewRecipeButton();
         robot.delay(300);
 
         //Type "CinnamonApples"
@@ -273,20 +298,22 @@ public class RecipePanelTest {
         robot.delay(100);
         assertEquals(size+1, ContentPane.getRecipeList().size());
 
-
     }
 
     @Test
     public void testAddAndDeleteRecipe(){
-        clickOnFile();
+        // clickOnFile();
+        // clickOnAddNewRecipe();
         int size = ContentPane.getRecipeList().size();
-        int addX = (int)ContentPane.getAddRecipeLocation().getX();
-        int addY = (int)ContentPane.getAddRecipeLocation().getY();
+        // int addX = (int)ContentPane.getAddRecipeLocation().getX();
+        // int addY = (int)ContentPane.getAddRecipeLocation().getY();
         assertEquals(size, ContentPane.getRecipeList().size());
-        robot.mouseMove(addX, addY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // robot.mouseMove(addX, addY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Add New Recipe");
+        clickOnAddNewRecipeButton();
         robot.delay(300);
 
         //Type "CinnamonApples"
@@ -323,14 +350,16 @@ public class RecipePanelTest {
         robot.delay(100);
 
         robot.delay(100);
-        clickOnFile();
-        int deleteX = (int)ContentPane.getDeleteRecipeLocation().getX();
-        int deleteY = (int)ContentPane.getDeleteRecipeLocation().getY();
-        robot.delay(100);
-        robot.mouseMove(deleteX, deleteY);
-        robot.delay(100);
-        robot.mousePress(mask);
-        robot.mouseRelease(mask);
+        // clickOnFile();
+        // int deleteX = (int)ContentPane.getDeleteRecipeLocation().getX();
+        // int deleteY = (int)ContentPane.getDeleteRecipeLocation().getY();
+        // robot.delay(100);
+        // robot.mouseMove(deleteX, deleteY);
+        // robot.delay(100);
+        // robot.mousePress(mask);
+        // robot.mouseRelease(mask);
+        // clickOnUIButton("Delete Selected Recipe");
+        clickOnDeleteRecipeButton();
         robot.delay(500);
         assertEquals(size, ContentPane.getRecipeList().size());
     }
@@ -341,9 +370,87 @@ public class RecipePanelTest {
 
     public void clickOnFile(){
         robot.delay(100);
-        int fileX = (int)ContentPane.getFileButtonLoc().getX();
-        int fileY = (int)ContentPane.getFileButtonLoc().getY();
-        robot.mouseMove(fileX, fileY);
+        int x = (int)ContentPane.getFileMenuLocation().getX();
+        int y = (int)ContentPane.getFileMenuLocation().getY();
+        robot.mouseMove(x,y);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(300);
+    }
+
+    // public void clickOnUIButton(String name) {
+    //     robot.delay(100);
+    //     int x = (int)ContentPane.getButtonLoc(name).getX();;
+    //     int y = (int)ContentPane.getButtonLoc(name).getY();;
+    //     robot.mouseMove(x, y);
+    //     robot.mousePress(mask);
+    //     robot.mouseRelease(mask);
+    //     robot.delay(100);
+    // }
+
+    public void clickOnAddNewRecipeButton() {
+        robot.delay(100);
+        int x = (int)ContentPane.getAddNewRecipeButtonLocation().getX();
+        int y = (int)ContentPane.getAddNewRecipeButtonLocation().getY();
+        robot.mouseMove(x,y);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(100);
+    }
+
+    public void clickOnDeleteRecipeButton() {
+        robot.delay(100);
+        int x = (int)ContentPane.getDeleteRecipeButtonLocation().getX();
+        int y = (int)ContentPane.getDeleteRecipeButtonLocation().getY();
+        robot.mouseMove(x,y);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(100);
+    }
+
+    public void clickOnLoadRecipeMenuItem() {
+        robot.delay(100);
+        clickOnFile();
+        int x = (int)ContentPane.getLoadRecipeListMenuItemLocation().getX();
+        int y = (int)ContentPane.getLoadRecipeListMenuItemLocation().getY();
+        robot.mouseMove(x,y);
+        robot.delay(100);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(100); 
+    }
+
+    public void clickOnSaveRecipeListMenuItem() {
+        robot.delay(100);
+        clickOnFile();
+        int x = (int)ContentPane.getSaveRecipeListMenuItemLocation().getX();
+        int y = (int)ContentPane.getSaveRecipeListMenuItemLocation().getY();
+        robot.mouseMove(x,y);
+        robot.delay(100);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(100);
+    }
+
+    public void clickOnSearchForRecipeMenuItem() {
+        robot.delay(100);
+        clickOnFile();
+        int x = (int)ContentPane.getSearchForRecipeMenuItemLocation().getX();
+        int y = (int)ContentPane.getSearchForRecipeMenuItemLocation().getY();
+        robot.mouseMove(x,y);
+        robot.delay(100);
+        robot.mousePress(mask);
+        robot.mouseRelease(mask);
+        robot.delay(100);
+    }
+
+    public void clickOnSearchForIngredientMenuItem() {
+        robot.delay(100);
+        clickOnFile();
+        int x = (int)ContentPane.getSearchForIngredientMenuItemLocation().getX();
+        int y = (int)ContentPane.getSearchForIngredientMenuItemLocation().getY();
+        robot.mouseMove(x,y);
+        robot.delay(100);
         robot.mousePress(mask);
         robot.mouseRelease(mask);
         robot.delay(100);
