@@ -28,3 +28,27 @@ The code as is launches a GUI window with two sample recipes. The user can add a
 4. Behavior of the searching functions is limited and inconsistent
 
 With some bug fixes and new features (see issues on main repo), this could be a flawless recipe manager.
+
+# F17 Final Remarks #
+
+## Files and Meanings##
+* Interface.java: Main method which sets up the program and JFrame
+
+* IngredientsList.java, Recipe.java, RecipeList.java: Core classes that are each parts of the Recipe Manager that it keeps.
+
+* RecipeAdder.java, RecipePanel.java: GUI classes that set up the interface.
+
+* IngredientsListTest.java, RecipeListTest.java, RecipeAdderTest.java, RecipePanelTest.java: Test classes for the above.
+
+## Current program functionality ##
+
+The program acts a functional keeper of cooking recipes, where the user can add, edit, delete, save, and load such recipes, from menus at the top and buttons at the bottom, as well as keyboard shortcuts. The shortcuts for these are [DELETE] and [N](to add new recipe). A recipe consists of a name, a description, directions, ingredients, and an image, and all recipes are kept on the sidebar. The user can save and load various recipe lists, and can select a saved recipe list on your computer to load on the program startup, as the default list. Search results show up at the bottom of the JFrame.
+
+## Bugs ##
+1. Image tests in RecipePanelTest.java (currently commented out) are generating exceptions despite passing
+2. Behavior of the searching functions is limited
+3. Keyboard shortcuts may bug out after playing with it a bit
+4. Newlines are interpreted using HTML's <br/> instead of '\n'
+6. On some screens, the window is not properly sized.
+5. Test coverage is somewhat limited
+
